@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+	<head>
+		<meta content="text/html;charset=UTF-8" http-equiv="Content-Type" />
+		<style>
+body {font-family: monospace; font-size: 14px;}
+.stat_tbl      {border-collapse:collapse; border-spacing: 0;border-style: solid;border-width:1px;}
+.stat_tbl    td{border-style: none;}
+.overlap_tbl   {border-collapse:collapse;border-spacing:0;}
+.overlap_tbl td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.overlap_tbl th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.overlap_tbl .tg-g59y{font-weight:bold;background-color:#ffce93;border-color:#000000;text-align:left;vertical-align:top; cursor: pointer;}
+.overlap_tbl .tg-0lax{text-align:left;vertical-align:top}
+.overlap_tbl .tg-0lax_dark{background-color: lightgrey;text-align:left;vertical-align:top}
+
+.vertical_tbl   {border-collapse:collapse;border-spacing:0;}
+.vertical_tbl:before { content:''; padding-top:110%;/* takes width as reference, + 10% for faking some extra padding */ display:inline-block; vertical-align:middle; }
+.vertical_tbl td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.vertical_tbl th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.vertical_tbl .tg{ font-weight:bold;background-color:#ffce93;border-color:#000000;text-align:left;vertical-align:top;text-align:center; white-space:nowrap; transform-origin:50% 50%; -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); }
+
+.diff_del {background-color: lightpink;}
+.diff_add {background-color: lightgreen;}
+
+.tbl_header {
+    cursor: pointer;
+}
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+</style>
+		<title>Mutation Testing Report lcr lcrb sdl uoi dcr 2021-Feb-24 09:33:29.5745844</title>
+		<script>/**
+ * Javascript for the HTML report page "index.html"
+ */
+var g_lastCol = -1;
+
+function init() {
+    theads = document.getElementsByClassName('tg-g59y');
+    for (var i = 0; i < theads.length; i++) {
+        theads[i].addEventListener('click', function(e) {table_onclick(e);});
+    }
+}
+function table_onclick(e) {
+    var col = e.target.id.split('-',2)[1];
+    var tbody = e.target.closest('table').tBodies[0];
+    var sorted = Array.prototype.slice.call(tbody.children);
+    var tbl_container = e.target.closest(".tbl_container");
+    var arrows = tbl_container.getElementsByTagName("i");
+    var extractSortKey = function(str) {
+        var num = parseFloat(str);
+        if (isNaN(num)) {
+            return str;
+        }
+        return num;
+    }
+    for (var i=0; i<arrows.length; i++) {
+        arrows[i].classList.remove("up");
+        arrows[i].classList.remove("down");
+        arrows[i].classList.add("right");
+    }
+    if (col === g_lastCol) {
+        sorted.sort( function(a,b) {
+            return extractSortKey(a.children[col].innerText) > extractSortKey(b.children[col].innerText);
+        });
+        var arrow = e.target.getElementsByTagName("i")[0];
+        arrow.classList.remove("down");
+        arrow.classList.add("up");
+        g_lastCol = -1;
+    } else {
+        sorted.sort( function(a,b) {
+            return extractSortKey(a.children[col].innerText) < extractSortKey(b.children[col].innerText);
+        });
+        var arrow = e.target.getElementsByTagName("i")[0];
+        arrow.classList.remove("right");
+        arrow.classList.add("down");
+        g_lastCol = col;
+    }
+    while (tbody.lastChild) {
+        tbody.removeChild(tbody.lastChild);
+    }
+    for(var i = 0; i<sorted.length; i++) {
+        tbody.insertRow(i).innerHTML = sorted[i].innerHTML;
+    }
+}
+
+		</script>
+	</head>
+	<body onload="init()">
+		<p><a href="stats.html">Statistics</a></p>
+		<p><a href="long_term_view.html">Long Term View</a></p>
+		<p><a href="nomut.html">NoMut Details</a></p>
+		<div class="tbl_container">
+			<table class="overlap_tbl">
+				<thead>
+					<tr>
+						<th class="tg-g59y" id="col-0">Path <i class="right"></i></th>
+						<th class="tg-g59y" id="col-1">Score <i class="right"></i></th>
+						<th class="tg-g59y" id="col-2">Alive <i class="right"></i></th>
+						<th class="tg-g59y" id="col-3">NoMut <i class="right"></i></th>
+						<th class="tg-g59y" id="col-4">Total <i class="right"></i></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><a href="files/lib_lz4.c.html">lib/lz4.c</a></td>
+						<td style="background-color: salmon">0.374</td>
+						<td style="background-color: salmon">786</td>
+						<td style="background-color: salmon">0</td>
+						<td style="background-color: salmon">1256</td>
+					</tr>
+					<tr>
+						<td><a href="files/lib_lz4frame.c.html">lib/lz4frame.c</a></td>
+						<td style="background-color: salmon">0.382</td>
+						<td style="background-color: salmon">557</td>
+						<td style="background-color: salmon">0</td>
+						<td style="background-color: salmon">901</td>
+					</tr>
+					<tr>
+						<td><a href="files/lib_lz4hc.c.html">lib/lz4hc.c</a></td>
+						<td style="background-color: red">0.126</td>
+						<td style="background-color: red">767</td>
+						<td style="background-color: red">0</td>
+						<td style="background-color: red">878</td>
+					</tr>
+					<tr>
+						<td><a href="files/lib_xxhash.c.html">lib/xxhash.c</a></td>
+						<td style="background-color: red">0.102</td>
+						<td style="background-color: red">325</td>
+						<td style="background-color: red">0</td>
+						<td style="background-color: red">362</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<p>NoMut is the number of alive mutants in the file that are ignored. This increases the score.</p>
+	</body>
+</html>

@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta content="text/html;charset=UTF-8" http-equiv="Content-Type" /><style>
+body {font-family: monospace; font-size: 14px;}
+.stat_tbl      {border-collapse:collapse; border-spacing: 0;border-style: solid;border-width:1px;}
+.stat_tbl    td{border-style: none;}
+.overlap_tbl   {border-collapse:collapse;border-spacing:0;}
+.overlap_tbl td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.overlap_tbl th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.overlap_tbl .tg-g59y{font-weight:bold;background-color:#ffce93;border-color:#000000;text-align:left;vertical-align:top; cursor: pointer;}
+.overlap_tbl .tg-0lax{text-align:left;vertical-align:top}
+.overlap_tbl .tg-0lax_dark{background-color: lightgrey;text-align:left;vertical-align:top}
+
+.vertical_tbl   {border-collapse:collapse;border-spacing:0;}
+.vertical_tbl:before { content:''; padding-top:110%;/* takes width as reference, + 10% for faking some extra padding */ display:inline-block; vertical-align:middle; }
+.vertical_tbl td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.vertical_tbl th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.vertical_tbl .tg{ font-weight:bold;background-color:#ffce93;border-color:#000000;text-align:left;vertical-align:top;text-align:center; white-space:nowrap; transform-origin:50% 50%; -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); }
+
+.diff_del {background-color: lightpink;}
+.diff_add {background-color: lightgreen;}
+
+.tbl_header {
+    cursor: pointer;
+}
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+</style><title>lib_xxhash.h</title><style>
+
+
+.mutant {display:none; background-color: yellow;}
+.status_alive {background-color: lightpink;}
+.status_noCoverage {background-color: lightpink;}
+.status_killed {background-color: lightgreen;}
+.status_killedByCompiler {background-color: #eeeeee;}
+.status_timeout {background-color: lightgreen;}
+.status_unknown {background-color: lightyellow;}
+.hover_alive {color: lightpink;}
+.hover_noCoverage {color: lightpink;}
+.hover_killed {color: lightgreen;}
+.hover_killedByCompiler {color: #eeeeee;}
+.hover_timeout {color: lightgreen;}
+.hover_unknown {color: lightyellow;}
+.literal {color: darkred;}
+.keyword {color: blue;}
+.comment {color: grey;}
+.line_nr {color: grey;}
+#mousehover {
+    background: grey;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    padding: 5px;
+    display: none;
+    position: absolute;
+    background: #2e3639;
+    color: #fff;
+}
+span.xx_label {
+    font-weight: bold;
+}
+#info_wrapper {
+    position: absolute;
+    width: 99%;
+}
+#info {
+    position: absolute;
+    top: 0;
+    width: 300px;
+    background: grey;
+    border-radius: 0px 0px 0px 10px;
+    -moz-border-radius: 10px;
+    padding: 5px;
+    border: 1px solid;
+    opacity:0.9;
+
+    background: #2e3639;
+}
+#info.fixed {
+    position: fixed;
+}
+#info span {
+    font-size: 80%;
+    color: #fff;
+    font-family: sans-serif;
+}
+#info select {
+    width: 150px;
+}
+#info_line {
+    background: #2e3639;
+    color: #eeeeee;
+}
+.loc {
+    display: table-cell;
+    vertical-align: inherit;
+    background: #ffffff;
+    width: 100%;
+}
+.loc_selected {
+    background: #cecece;
+}
+#filter_wrapper {
+    display: block;
+}
+#filter_wrapper table {
+    background: #394347;
+    display: block
+}
+#filter_wrapper table tr{
+    display: block;
+}
+#filter_wrapper table td {
+    background : #445055;
+    display: block;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+.filter_title {
+    color: #ffffff;
+    font-family: sans-serif;
+}
+#filter_wrapper thead, tbody { display: block; }
+
+#filter_wrapper tbody {
+    width: 100%;
+    height: 135px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#testcases thead, tbody { display: block; }
+#testcases tbody {
+    width: 100%;
+    height: 135px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#testcases {
+    height: 135px;
+    background: #394347;
+    display: block
+}
+#testcases tr{
+    background : #445055;
+    display: block;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 2px;
+}
+
+#info_table {
+    width: 100%;
+}
+#locs {
+    display: block;
+    width: max-content;
+}
+#locs  tr{
+    display: block;
+}
+
+#locs td {
+    display: block;
+}
+</style><script>/**
+Copyright: Copyright (c) 2018, Joakim Brännström. All rights reserved.
+License: MPL-2
+Author: Joakim Brännström (joakim.brannstrom@gmx.com)
+
+This Source Code Form is subject to the terms of the Mozilla Public License,
+v.2.0. If a copy of the MPL was not distributed with this file, You can obtain
+one at http://mozilla.org/MPL/2.0/.
+*/
+
+const LOC_TRAVERSE_LOOP = true;
+const MUT_TRAVERSE_NEXT_LOC = true;
+const LOC_SCROLL_TO_ON_TRAVERSE = true;
+
+var g_displayed_testcases = 10; //Number of testcases displayed in the info line
+var g_show_mutant = true;
+var g_active_mutid = 0;
+var g_active_locid = null;
+var g_loc_mutids = {};
+var g_filter_kinds = [];
+var g_filter_status = [];
+
+var key_traverse_locs_up = 'ArrowUp';
+var key_traverse_locs_down = 'ArrowDown';
+var key_traverse_muts_up = 'ArrowLeft';
+var key_traverse_muts_down = 'ArrowRight';
+var key_toggle_show_mutant = 'Numpad0';
+
+
+/**
+ * Initializes event listeners, data and intial state
+ */
+function init() {
+    var current_mutant_selector = document.getElementById('current_mutant');
+    var num_testcases = document.getElementById("num_testcases");
+    current_mutant_selector.addEventListener('change',
+        function(e) { current_mutant_onchange(e); });
+    num_testcases.addEventListener('change',
+        function(e) { on_num_testcases_change(e); });
+    window.addEventListener('resize',
+        on_window_resize);
+    window.addEventListener('keydown',
+        function(e) { on_keyboard_input(e); });
+    g_displayed_testcases = num_testcases.value;
+    num_testcases.max = MAX_NUM_TESTCASES;
+    init_legend();
+    on_window_resize();
+    var locs_table = document.getElementById("locs");
+    var locs = document.getElementsByClassName('loc');
+    for (var i=0; i<locs.length; i++){
+        locs[i].addEventListener('wheel',
+            function(e) { on_loc_wheel(e); });
+        locs[i].addEventListener('click',
+            function(e) { on_loc_click(e); });
+
+        // Get all mutant ids in the loc.
+        muts = locs[i].getElementsByClassName('mutant');
+        g_loc_mutids[locs[i].id] = [];
+        for (var j=0; j<muts.length; j++) {
+            g_loc_mutids[locs[i].id].push(muts[j].id);
+        }
+    }
+    select_loc(locs[0].id);
+    //Select loc or mutant by hash
+    var mutid = -1;
+    var hash = window.location.hash.substring(1);
+    if (document.getElementById(hash)) {
+        if (document.getElementById(hash).classList.contains('mutant')) {
+            mutid = hash;
+            set_active_mutant(mutid);
+            highlight_mutant(mutid);
+            select_loc(get_closest_loc(document.getElementById(mutid)).id, true);
+        } else if (document.getElementById(hash).classList.contains('loc')) {
+            select_loc(hash, true);
+        }
+    }
+    click_show_legend();
+    click_show_mutant();
+    init_filter_kind();
+    init_filter_status();
+    document.body.focus();
+}
+/**
+ * Toggles whether to show the legend or not
+ */
+function click_show_legend() {
+    var show_legend = document.getElementById("show_legend").checked;
+    var legend = document.getElementById("legend_box");
+    if (show_legend) {
+        legend.style.display = "inline";
+    } else {
+        legend.style.display = "none";
+    }
+}
+function on_num_testcases_change(e) {
+    num_testcases = e.target;
+    if (num_testcases.value != g_displayed_testcases) {
+        g_displayed_testcases = num_testcases.value;
+        set_info_line(g_active_mutid);
+    }
+}
+/**
+ * Manages all keyboard bindings
+ * @param {event} e the captured keyboard event
+ */
+function on_keyboard_input(e) {
+    switch (e.code) {
+        case key_traverse_locs_down:
+            e.preventDefault();
+            traverse_locs(1);
+            break;
+        case key_traverse_locs_up:
+            e.preventDefault();
+            traverse_locs(-1);
+            break;
+        case key_traverse_muts_down:
+            traverse_mutants(1);
+            break;
+        case key_traverse_muts_up:
+            traverse_mutants(-1);
+            break;
+        case key_toggle_show_mutant:
+            document.getElementById("show_mutant").checked = !document.getElementById("show_mutant").checked
+            click_show_mutant();
+    }
+    return;
+}
+/**
+ * Traverses mutants if a scroll event is captured in the selected loc
+ * @param {event} e the captured scrool event
+ */
+function on_loc_wheel(e) {
+    var loc = get_closest_loc(e.target);
+    if(loc.id === g_active_locid) {
+        e.preventDefault();
+        traverse_mutants(e.deltaY);
+    }
+    return;
+}
+/**
+ * Selects a loc when any element within it captures a click event.
+ * @param {event} e the captured click event
+ */
+function on_loc_click(e) {
+    if (!e.target.classList.contains("loc") && e.target.onclick != null)
+        return;
+    var loc = get_closest_loc(e.target);
+    if (loc) {
+        select_loc(loc.id);
+    } else {
+        select_loc(g_active_locid);
+    }
+    return;
+}
+/**
+ * Selects the loc with the given id.
+ * @param {id} loc_id the id of the loc to select
+ * @param {boolean} pure false if active mutant and mutation options are to be cleared.
+ */
+function select_loc(loc_id, pure) {
+    locs = document.getElementsByClassName('loc');
+    if(g_active_locid){
+        document.getElementById(g_active_locid).classList.toggle("loc_selected");
+        remove_info_line();
+    }
+    loc = document.getElementById(loc_id);
+    g_active_locid = loc.id;
+    loc.classList.toggle("loc_selected");
+    if(!pure) {
+        set_active_mutant(-1);
+        deactivate_mutants();
+        clear_mutation_options();
+    }
+    show_info_line();
+    set_mutation_options(g_active_locid);
+}
+function show_info_line() {
+    if (!document.getElementById(g_active_locid).getElementsByClassName("mutant").length)
+        return;
+    var loc_table = document.getElementById("locs");
+    var line = g_active_locid.split('-',2)[1];
+    var info_row = loc_table.insertRow(line);
+
+    info_row.innerHTML = `
+    <td id='info_line'>
+    <table id='info_table'>
+        <tr id="loc_muts_info"></tr>
+        <tr>
+            <td><table id="testcases" ></table</td>
+        </tr>
+    </table>
+    </td>
+    `;
+    set_info_line(g_active_mutid);
+}
+function remove_info_line() {
+    if (!document.getElementById("info_line"))
+        return;
+    var line = g_active_locid.split('-',2)[1];
+    document.getElementById("locs").deleteRow(line);
+}
+function set_info_line(mutid) {
+    if (!document.getElementById(g_active_locid).getElementsByClassName("mutant").length)
+        return;
+
+    var testcases = document.getElementById("testcases");
+    document.getElementById("loc_muts_info").innerHTML = make_td(make_kind_status_info(g_active_locid, mutid));
+    var tcs = g_muts_data[mutid].testCases
+    if (!tcs) {
+        while(testcases.rows.length > 0) {
+            testcases.deleteRow(-1);
+        }
+        return;
+    }
+    while(testcases.rows.length > Math.min(g_displayed_testcases, tcs.length)) {
+        testcases.deleteRow(-1);
+    }
+    for (var i = 0; i < Math.min(g_displayed_testcases, tcs.length); i++) {
+        var id = "tc" + parseInt(i+1);
+        var row = document.getElementById(id)
+        if (!row) {
+            row = testcases.insertRow(i);
+            row.id = id;
+        }
+        var test_case = tcs[i];
+        if (test_case) {
+            row.innerHTML = make_td(test_case + ": "+g_testcases_kills[test_case]);
+        }
+    }
+}
+function make_td(html, id) {
+    if(!id)
+        return "<td>"+html+"</td>";
+    return "<td id='"+id+"'>"+html+"</td>";
+}
+function make_kind_status_info(locid, curr_mutid) {
+    if (curr_mutid == -1) {
+        return "<span>No active mutant</span>";
+    }
+    var mutids = g_loc_mutids[locid];
+    var html ="";
+    for (var i=0; i<mutids.length; i++) {
+        var mutid = mutids[i];
+        var mut = g_muts_data[mutid];
+        if (!g_filter_kinds.includes(mut.kindGroup) &&
+            !g_filter_status.includes(mut.status))
+        {
+            if (mutids[i]==curr_mutid)
+                html+=`<span class="hover_`+g_mut_st_map[mut.status]+`"><b><u>`+g_mut_kind_map[mut.kind]+`</b></u> </span>`;
+            else
+                html+=`<span class="hover_`+g_mut_st_map[mut.status]+`">`+g_mut_kind_map[mut.kind]+` </span>`;
+        }
+    }
+    return html;
+}
+/**
+ * Adds the mutants on the loc for the given id
+ * @param {id} loc_id id of the loc whose mutants to add
+ */
+function set_mutation_options(loc_id) {
+    var mutids = g_loc_mutids[loc_id];
+    var current_mutant_selector = document.getElementById('current_mutant');
+
+    current_mutant_selector.selectedIndex = 0;
+    for (var i = 0; i < mutids.length; i++) {
+        var mutid = mutids[i];
+        var mut = g_muts_data[mutid];
+        if (!g_filter_kinds.includes(mut.kindGroup) &&
+            !g_filter_status.includes(mut.status))
+        {
+            var s = document.createElement('OPTION');
+            s.value = mutid;
+            s.text = mut.mutText;
+            current_mutant_selector.add(s);
+            if (g_active_mutid === s.value)
+                current_mutant_selector.selectedIndex = i+1;
+        }
+    }
+}
+/**
+ * Changes the active mutant on a given line
+ * @param {*} direction positive for next, negative for previous
+ */
+function traverse_mutants(direction) {
+    current_mutant_selector = document.getElementById('current_mutant');
+    selected = current_mutant_selector.selectedIndex;
+
+    if (direction>0) {
+        if (selected+1 < current_mutant_selector.options.length)
+            current_mutant_selector.selectedIndex += 1;
+        else if (MUT_TRAVERSE_NEXT_LOC)
+            traverse_locs(1);
+
+    } else if (direction < 0) {
+        if (selected-1 >= 0)
+            current_mutant_selector.selectedIndex-=1;
+        else if (MUT_TRAVERSE_NEXT_LOC) {
+            traverse_locs(-1);
+            current_mutant_selector.selectedIndex = current_mutant_selector.options.length-1;
+        }
+    }
+    var mutid = current_mutant_selector.value;
+    set_active_mutant(mutid);
+    highlight_mutant(mutid);
+    if (mutid != -1)
+        scroll_to(mutid);
+    else
+        scroll_to(g_active_locid);
+    set_info_line(mutid);
+}
+/**
+ * Changes the active line
+ * @param {*} direction positive for next, negative for previous
+ */
+function traverse_locs(direction) {
+    locs = document.getElementsByClassName('loc');
+    var old_active_locid = g_active_locid;
+    for (var i = 0; i < locs.length; i++) {
+        if (locs[i].id === g_active_locid) {
+            if (direction > 0) {
+                if (i+1 < locs.length)
+                    select_loc(locs[i+1].id);
+                else if (LOC_TRAVERSE_LOOP)
+                    select_loc(locs[0].id);
+            } else if (direction < 0) {
+                if (i-1 >= 0)
+                    select_loc(locs[i-1].id);
+                else if (LOC_TRAVERSE_LOOP)
+                    select_loc(locs[locs.length-1].id);
+            }
+            break;
+        }
+    }
+    if (old_active_locid !== g_active_locid && LOC_SCROLL_TO_ON_TRAVERSE) {
+        scroll_to(g_active_locid, true);
+    }
+    return;
+}
+/**
+ * Gets the closest loc of an element
+ * @param {*} target The target element
+ */
+function get_closest_loc(target) {
+    if (!target)
+        return document.getElementById(g_active_locid);
+    if (target.className === "loc")
+        return target;
+    else
+        return target.closest(".loc");
+}
+/**
+ * Moves the info box when the client window is resized
+ */
+function on_window_resize() {
+    var info_box = document.getElementById('info');
+    var top = info_box.offsetTop - info_box.style.marginTop;
+    var left = window.innerWidth - info_box.clientWidth - 30;
+    info_box.style.left = left + "px";
+    info_box.style.top = top + "px";
+}
+/**
+ * Updates the selected mutant when using the selector
+ * @param {event} e captured change event
+ */
+function current_mutant_onchange(e) {
+    var current_mutant_selector = document.getElementById('current_mutant');
+    var id = current_mutant_selector.value;
+
+    current_mutant_selector.focus();
+    current_mutant_selector.blur();
+    document.body.focus();
+    if (id == -1) {
+        location.hash = "#";
+        set_active_mutant(id);
+        deactivate_mutants();
+        set_info_line(id);
+        return;
+    }
+
+    set_active_mutant(id);
+    highlight_mutant(id);
+    set_info_line(id);
+}
+/**
+ * Removes all options (except the first) from the selector.
+ */
+function clear_mutation_options() {
+    current_mutant_selector = document.getElementById('current_mutant');
+    while (current_mutant_selector.options.length!=1) {
+        current_mutant_selector.options[1]=null;
+    }
+}
+/**
+ * Updates the ui to display the mutant with the given id as selected.
+ */
+function ui_set_mut(id) {
+    loc_id = get_closest_loc(document.getElementById(id)).id
+    if (loc_id != g_active_locid){
+        select_loc(loc_id);
+        return;
+    }
+    mutids = g_loc_mutids[loc_id];
+    set_active_mutant(id);
+    highlight_mutant(id);
+    scroll_to(id, false);
+    set_info_line(id);
+    var current_mutant_selector = document.getElementById('current_mutant');
+    for (var i=0; i<mutids.length; i++) {
+        if (id == mutids[i]) {
+            current_mutant_selector.selectedIndex = i+1;
+            break;
+        }
+    }
+}
+/**
+ * Sets the active mutant id as the given id.
+ * @param {id} mutid id of mutant to set as activate
+ */
+function set_active_mutant(mutid) {
+    if (mutid) {
+        g_active_mutid = mutid;
+    }
+}
+/**
+ * Toggles whether to show mutants or not.
+ */
+function click_show_mutant() {
+    g_show_mutant = document.getElementById("show_mutant").checked;
+    if (g_show_mutant) {
+        highlight_mutant(g_active_mutid);
+    } else {
+        deactivate_mutants();
+    }
+}
+/**
+ * Activates the mutant of the given id.
+ * @param {id} mutid id of the mutant to activate
+ */
+function activate_mutant(mutid) {
+    if (!g_show_mutant) {
+        return;
+    }
+    mut = document.getElementById(mutid);
+    if (mut) {
+        clss = document.getElementsByClassName("mutid" + mutid);
+        if (clss) {
+            for (var i=0; i<clss.length; i++) {
+                clss[i].style.display = 'none';
+            }
+        }
+        mut.style.display = 'inline';
+    }
+}
+/**
+ * Deactivates all mutants
+ */
+function deactivate_mutants() {
+    clear_current_mutant_info();
+    var orgs = document.querySelectorAll(".original");
+    var muts = document.querySelectorAll(".mutant");
+    for (var i=0; i<orgs.length; i++) {
+        orgs[i].style.display = "inline";
+    }
+    for (i=0; i<muts.length; i++) {
+        muts[i].style.display = "none";
+    }
+}
+/**
+ * Highlights the mutant of the given id
+ * @param {id} mutid id of the mutant to highlight
+ */
+function highlight_mutant(mutid) {
+    deactivate_mutants();
+    mut = document.getElementById(mutid);
+    if (!mut)
+        return;
+    if (mut.classList.contains("mutant")) {
+        activate_mutant(mutid);
+        set_current_mutant_info(mutid);
+    }
+}
+function click_filter_kind(kind) {
+    var checkbox = document.getElementById(g_mut_kindGroup_map[kind]);
+    if(checkbox.checked) {
+        for( var i = 0; i < g_filter_kinds.length; i++){
+            if (g_filter_kinds[i] === kind) {
+
+                g_filter_kinds.splice(i, 1);
+            }
+         }
+    }
+    else {
+        g_filter_kinds.push(kind);
+    }
+    set_active_mutant(-1);
+    deactivate_mutants();
+    clear_mutation_options();
+    set_mutation_options(g_active_locid);
+    set_info_line(g_active_mutid);
+}
+function click_filter_status(status) {
+    var checkbox = document.getElementById(g_mut_st_map[status]);
+    if(checkbox.checked) {
+        for( var i = 0; i < g_filter_status.length; i++){
+            if (g_filter_status[i] === status) {
+
+                g_filter_status.splice(i, 1);
+            }
+         }
+    }
+    else {
+        g_filter_status.push(status);
+    }
+    set_active_mutant(-1);
+    deactivate_mutants();
+    clear_mutation_options();
+    set_mutation_options(g_active_locid);
+    set_info_line(g_active_mutid);
+}
+function set_current_mutant_info(mutid) {
+    mut = g_muts_data[mutid];
+    document.getElementById("current_mutant_status").innerText = g_mut_st_map[mut.status];
+    document.getElementById("current_mutant_metadata").innerText = mut.meta;
+    document.getElementById("current_mutant_id").innerText = mutid;
+    document.getElementById("current_mutant_original").innerText = mut.orgText;
+}
+/**
+ * Clears the info box of mutant related text.
+ */
+function clear_current_mutant_info(){
+    document.getElementById("current_mutant_status").innerText = "";
+    document.getElementById("current_mutant_metadata").innerText = "";
+    document.getElementById("current_mutant_id").innerText = "";
+    document.getElementById("current_mutant_original").innerText = "";
+}
+/**
+ * Displays info about all mutants in the same place as the mutant being hovered.
+ * @param {event} evt the captured event
+ * @param {innerHTML} html The inner html to be displayed.
+ */
+function fly(evt, html) {
+    var el = document.getElementById("mousehover");
+    if (evt.type == "mouseenter") {
+        el.style.display = "inline";
+    } else {
+        el.style.display = "none";
+    }
+
+    el.innerHTML = html;
+    el.style.left = (evt.pageX + 30) + 'px';
+    el.style.top = (evt.pageY + 30) + 'px';
+}
+/**
+ * Scrolls to the element of the given anchor
+ * @param {id} anchor the id of the element to scroll to
+ * @param {boolean} center whether to centre the page on the anchor
+ */
+function scroll_to(anchor, center) {
+    var curr_pos = window.pageYOffset;
+    location.hash = "#" + anchor; //Removing this allows for using the browser back button.
+    if (center) {
+        var newpos = document.getElementById(anchor).offsetTop - window.innerHeight/2;
+        if (newpos > 0) {
+            window.scrollTo(0, newpos);
+        }
+        else {
+            window.scrollTo(0, 0);
+        }
+    } else {
+        window.scrollTo(0, curr_pos);
+    }
+}
+// Move most of this to html at some point
+function init_legend() {
+   document.getElementById("legend1_action").innerHTML = "Next line: ";
+   document.getElementById("legend2_action").innerHTML = "Prev line: ";
+   document.getElementById("legend3_action").innerHTML = "Next mutant: ";
+   document.getElementById("legend4_action").innerHTML = "Prev mutant: ";
+   document.getElementById("legend5_action").innerHTML = "Toggle show: ";
+   document.getElementById("legend1_key").innerHTML = key_traverse_locs_down;
+   document.getElementById("legend2_key").innerHTML = key_traverse_locs_up;
+   document.getElementById("legend3_key").innerHTML = key_traverse_muts_down;
+   document.getElementById("legend4_key").innerHTML = key_traverse_muts_up;
+   document.getElementById("legend5_key").innerHTML = key_toggle_show_mutant;
+}
+function init_filter_kind() {
+    var table = document.getElementById("filter_kind");
+
+    for (var i=0; i < g_mut_kindGroup_map.length; i++) {
+        var row = table.insertRow(i);
+        row.innerHTML = `<td><input id="`+g_mut_kindGroup_map[i]+ `" type="checkbox" onclick='click_filter_kind(`+i+`)' checked />
+                        <span class="xx_label">`+g_mut_kindGroup_map[i]+`</span></td>`;
+    }
+}
+function init_filter_status() {
+    var table = document.getElementById("filter_status");
+
+    for (var i=0; i<g_mut_st_map.length; i++) {
+        var row = table.insertRow(i);
+        row.innerHTML = `<td><input id="`+g_mut_st_map[i]+ `" type="checkbox" onclick='click_filter_status(`+i+`)' checked />
+        <span class="xx_label">`+g_mut_st_map[i]+`</span></td>`;
+    }
+    return;
+}
+</script></head>
+<body onload="javascript:init();"><div id="mousehover"></div>
+<div id="info_wrapper">
+<div class="fixed" id="info">
+<table>
+  <tr>
+    <td><span class="xx_label">Id: </span> <span id="current_mutant_id"></span></td>
+    <td></td>
+    <td><a href="../index.html" style="color: white">To index</a></td>
+  </tr>
+  <tr>
+    <td><span class="xx_label">Original: </span></td>
+    <td><span id="current_mutant_original"></span></td>
+    <td><input id="show_legend" onclick="click_show_legend(this)" type="checkbox" /><span class="xx_label" id="legend">Legend</span></td>
+  </tr>
+  <tr>
+    <td><span class="xx_label">Status: </span></td>
+    <td><span id="current_mutant_status"></span></td>
+    <td><span id="current_mutant_metadata"></span></td>
+  </tr>
+  <tr>
+    <td><span class="xx_label">Mutant: </span></td>
+    <td>
+      <select id="current_mutant">
+        <option selected="selected" value="-1">Original</option>
+      </select>
+    </td>
+    <td><input checked="checked" id="show_mutant" onclick="click_show_mutant(this)" type="checkbox" /><span class="xx_label">Show</span></td>
+  </tr>
+</table>
+<div id="filter_wrapper">
+<p class="filter_title">Testcases to display</p>
+<input id="num_testcases" max="10" min="0" step="1" type="number" value="5" />
+<p class="filter_title">Filter by kind</p>
+<table id="filter_kind">
+</table>
+<p class="filter_title">Filter by status</p>
+<table id="filter_status">
+</table>
+</div>
+<table id="legend_box" style="display: none;">
+  <tr id="legend1">
+    <td><span class="xx_label" id="legend1_action"></span></td>
+    <td><span id="legend1_key"></span></td>
+  </tr>
+  <tr id="legend2">
+    <td><span class="xx_label" id="legend2_action"></span></td>
+    <td><span id="legend2_key"></span></td>
+  </tr>
+  <tr id="legend3">
+    <td><span class="xx_label" id="legend3_action"></span></td>
+    <td><span id="legend3_key"></span></td>
+  </tr>
+  <tr id="legend4">
+    <td><span class="xx_label" id="legend4_action"></span></td>
+    <td><span id="legend4_key"></span></td>
+  </tr>
+  <tr id="legend5">
+    <td><span class="xx_label" id="legend5_action"></span></td>
+    <td><span id="legend5_key"></span></td>
+  </tr>
+</table>
+</div>
+</div>
+<table cellpadding="0" id="locs"><tr><td class="loc" id="loc-1"><span class="line_nr">1:</span><div style="display: inline;"><span class="original comment">/*</span></div></td></tr><tr><td class="loc" id="loc-2"><span class="line_nr">2:</span><div style="display: inline;"><span class="original comment">   xxHash - Extremely Fast Hash algorithm</span></div></td></tr>
+<tr><td class="loc" id="loc-3"><span class="line_nr">3:</span><div style="display: inline;"><span class="original comment">   Header File</span></div></td></tr>
+<tr><td class="loc" id="loc-4"><span class="line_nr">4:</span><div style="display: inline;"><span class="original comment">   Copyright (C) 2012-2016, Yann Collet.</span></div></td></tr>
+<tr><td class="loc" id="loc-5"><span class="line_nr">5:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-6"><span class="line_nr">6:</span><div style="display: inline;"><span class="original comment">   BSD 2-Clause License (http://www.opensource.org/licenses/bsd-license.php)</span></div></td></tr>
+<tr><td class="loc" id="loc-7"><span class="line_nr">7:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-8"><span class="line_nr">8:</span><div style="display: inline;"><span class="original comment">   Redistribution and use in source and binary forms, with or without</span></div></td></tr>
+<tr><td class="loc" id="loc-9"><span class="line_nr">9:</span><div style="display: inline;"><span class="original comment">   modification, are permitted provided that the following conditions are</span></div></td></tr>
+<tr><td class="loc" id="loc-10"><span class="line_nr">10:</span><div style="display: inline;"><span class="original comment">   met:</span></div></td></tr>
+<tr><td class="loc" id="loc-11"><span class="line_nr">11:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-12"><span class="line_nr">12:</span><div style="display: inline;"><span class="original comment">       * Redistributions of source code must retain the above copyright</span></div></td></tr>
+<tr><td class="loc" id="loc-13"><span class="line_nr">13:</span><div style="display: inline;"><span class="original comment">   notice, this list of conditions and the following disclaimer.</span></div></td></tr>
+<tr><td class="loc" id="loc-14"><span class="line_nr">14:</span><div style="display: inline;"><span class="original comment">       * Redistributions in binary form must reproduce the above</span></div></td></tr>
+<tr><td class="loc" id="loc-15"><span class="line_nr">15:</span><div style="display: inline;"><span class="original comment">   copyright notice, this list of conditions and the following disclaimer</span></div></td></tr>
+<tr><td class="loc" id="loc-16"><span class="line_nr">16:</span><div style="display: inline;"><span class="original comment">   in the documentation and/or other materials provided with the</span></div></td></tr>
+<tr><td class="loc" id="loc-17"><span class="line_nr">17:</span><div style="display: inline;"><span class="original comment">   distribution.</span></div></td></tr>
+<tr><td class="loc" id="loc-18"><span class="line_nr">18:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-19"><span class="line_nr">19:</span><div style="display: inline;"><span class="original comment">   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</span></div></td></tr>
+<tr><td class="loc" id="loc-20"><span class="line_nr">20:</span><div style="display: inline;"><span class="original comment">   &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</span></div></td></tr>
+<tr><td class="loc" id="loc-21"><span class="line_nr">21:</span><div style="display: inline;"><span class="original comment">   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR</span></div></td></tr>
+<tr><td class="loc" id="loc-22"><span class="line_nr">22:</span><div style="display: inline;"><span class="original comment">   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</span></div></td></tr>
+<tr><td class="loc" id="loc-23"><span class="line_nr">23:</span><div style="display: inline;"><span class="original comment">   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</span></div></td></tr>
+<tr><td class="loc" id="loc-24"><span class="line_nr">24:</span><div style="display: inline;"><span class="original comment">   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</span></div></td></tr>
+<tr><td class="loc" id="loc-25"><span class="line_nr">25:</span><div style="display: inline;"><span class="original comment">   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</span></div></td></tr>
+<tr><td class="loc" id="loc-26"><span class="line_nr">26:</span><div style="display: inline;"><span class="original comment">   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</span></div></td></tr>
+<tr><td class="loc" id="loc-27"><span class="line_nr">27:</span><div style="display: inline;"><span class="original comment">   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</span></div></td></tr>
+<tr><td class="loc" id="loc-28"><span class="line_nr">28:</span><div style="display: inline;"><span class="original comment">   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</span></div></td></tr>
+<tr><td class="loc" id="loc-29"><span class="line_nr">29:</span><div style="display: inline;"><span class="original comment">   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span></div></td></tr>
+<tr><td class="loc" id="loc-30"><span class="line_nr">30:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-31"><span class="line_nr">31:</span><div style="display: inline;"><span class="original comment">   You can contact the author at :</span></div></td></tr>
+<tr><td class="loc" id="loc-32"><span class="line_nr">32:</span><div style="display: inline;"><span class="original comment">   - xxHash source repository : https://github.com/Cyan4973/xxHash</span></div></td></tr>
+<tr><td class="loc" id="loc-33"><span class="line_nr">33:</span><div style="display: inline;"><span class="original comment">*/</span></div></td></tr>
+<tr><td class="loc" id="loc-34"><span class="line_nr">34:</span></td></tr>
+<tr><td class="loc" id="loc-35"><span class="line_nr">35:</span><div style="display: inline;"><span class="original comment">/* Notice extracted from xxHash homepage :</span></div></td></tr>
+<tr><td class="loc" id="loc-36"><span class="line_nr">36:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-37"><span class="line_nr">37:</span><div style="display: inline;"><span class="original comment">xxHash is an extremely fast Hash algorithm, running at RAM speed limits.</span></div></td></tr>
+<tr><td class="loc" id="loc-38"><span class="line_nr">38:</span><div style="display: inline;"><span class="original comment">It also successfully passes all tests from the SMHasher suite.</span></div></td></tr>
+<tr><td class="loc" id="loc-39"><span class="line_nr">39:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-40"><span class="line_nr">40:</span><div style="display: inline;"><span class="original comment">Comparison (single thread, Windows Seven 32 bits, using SMHasher on a Core 2 Duo @3GHz)</span></div></td></tr>
+<tr><td class="loc" id="loc-41"><span class="line_nr">41:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-42"><span class="line_nr">42:</span><div style="display: inline;"><span class="original comment">Name            Speed       Q.Score   Author</span></div></td></tr>
+<tr><td class="loc" id="loc-43"><span class="line_nr">43:</span><div style="display: inline;"><span class="original comment">xxHash          5.4 GB/s     10</span></div></td></tr>
+<tr><td class="loc" id="loc-44"><span class="line_nr">44:</span><div style="display: inline;"><span class="original comment">CrapWow         3.2 GB/s      2       Andrew</span></div></td></tr>
+<tr><td class="loc" id="loc-45"><span class="line_nr">45:</span><div style="display: inline;"><span class="original comment">MumurHash 3a    2.7 GB/s     10       Austin Appleby</span></div></td></tr>
+<tr><td class="loc" id="loc-46"><span class="line_nr">46:</span><div style="display: inline;"><span class="original comment">SpookyHash      2.0 GB/s     10       Bob Jenkins</span></div></td></tr>
+<tr><td class="loc" id="loc-47"><span class="line_nr">47:</span><div style="display: inline;"><span class="original comment">SBox            1.4 GB/s      9       Bret Mulvey</span></div></td></tr>
+<tr><td class="loc" id="loc-48"><span class="line_nr">48:</span><div style="display: inline;"><span class="original comment">Lookup3         1.2 GB/s      9       Bob Jenkins</span></div></td></tr>
+<tr><td class="loc" id="loc-49"><span class="line_nr">49:</span><div style="display: inline;"><span class="original comment">SuperFastHash   1.2 GB/s      1       Paul Hsieh</span></div></td></tr>
+<tr><td class="loc" id="loc-50"><span class="line_nr">50:</span><div style="display: inline;"><span class="original comment">CityHash64      1.05 GB/s    10       Pike &amp; Alakuijala</span></div></td></tr>
+<tr><td class="loc" id="loc-51"><span class="line_nr">51:</span><div style="display: inline;"><span class="original comment">FNV             0.55 GB/s     5       Fowler, Noll, Vo</span></div></td></tr>
+<tr><td class="loc" id="loc-52"><span class="line_nr">52:</span><div style="display: inline;"><span class="original comment">CRC32           0.43 GB/s     9</span></div></td></tr>
+<tr><td class="loc" id="loc-53"><span class="line_nr">53:</span><div style="display: inline;"><span class="original comment">MD5-32          0.33 GB/s    10       Ronald L. Rivest</span></div></td></tr>
+<tr><td class="loc" id="loc-54"><span class="line_nr">54:</span><div style="display: inline;"><span class="original comment">SHA1-32         0.28 GB/s    10</span></div></td></tr>
+<tr><td class="loc" id="loc-55"><span class="line_nr">55:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-56"><span class="line_nr">56:</span><div style="display: inline;"><span class="original comment">Q.Score is a measure of quality of the hash function.</span></div></td></tr>
+<tr><td class="loc" id="loc-57"><span class="line_nr">57:</span><div style="display: inline;"><span class="original comment">It depends on successfully passing SMHasher test set.</span></div></td></tr>
+<tr><td class="loc" id="loc-58"><span class="line_nr">58:</span><div style="display: inline;"><span class="original comment">10 is a perfect score.</span></div></td></tr>
+<tr><td class="loc" id="loc-59"><span class="line_nr">59:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-60"><span class="line_nr">60:</span><div style="display: inline;"><span class="original comment">A 64-bit version, named XXH64, is available since r35.</span></div></td></tr>
+<tr><td class="loc" id="loc-61"><span class="line_nr">61:</span><div style="display: inline;"><span class="original comment">It offers much better speed, but for 64-bit applications only.</span></div></td></tr>
+<tr><td class="loc" id="loc-62"><span class="line_nr">62:</span><div style="display: inline;"><span class="original comment">Name     Speed on 64 bits    Speed on 32 bits</span></div></td></tr>
+<tr><td class="loc" id="loc-63"><span class="line_nr">63:</span><div style="display: inline;"><span class="original comment">XXH64       13.8 GB/s            1.9 GB/s</span></div></td></tr>
+<tr><td class="loc" id="loc-64"><span class="line_nr">64:</span><div style="display: inline;"><span class="original comment">XXH32        6.8 GB/s            6.0 GB/s</span></div></td></tr>
+<tr><td class="loc" id="loc-65"><span class="line_nr">65:</span><div style="display: inline;"><span class="original comment">*/</span></div></td></tr>
+<tr><td class="loc" id="loc-66"><span class="line_nr">66:</span></td></tr>
+<tr><td class="loc" id="loc-67"><span class="line_nr">67:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">ifndef</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXHASH_H_5627135585666179</span></div></td></tr>
+<tr><td class="loc" id="loc-68"><span class="line_nr">68:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXHASH_H_5627135585666179</span></div>&nbsp;<div style="display: inline;"><span class="original literal">1</span></div></td></tr>
+<tr><td class="loc" id="loc-69"><span class="line_nr">69:</span></td></tr>
+<tr><td class="loc" id="loc-70"><span class="line_nr">70:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">defined</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__cplusplus</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-71"><span class="line_nr">71:</span><div style="display: inline;"><span class="original keyword">extern</span></div>&nbsp;<div style="display: inline;"><span class="original literal">&quot;C&quot;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-72"><span class="line_nr">72:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">endif</span></div></td></tr>
+<tr><td class="loc" id="loc-73"><span class="line_nr">73:</span></td></tr>
+<tr><td class="loc" id="loc-74"><span class="line_nr">74:</span></td></tr>
+<tr><td class="loc" id="loc-75"><span class="line_nr">75:</span><div style="display: inline;"><span class="original comment">/* ****************************</span></div></td></tr>
+<tr><td class="loc" id="loc-76"><span class="line_nr">76:</span><div style="display: inline;"><span class="original comment">*  Definitions</span></div></td></tr>
+<tr><td class="loc" id="loc-77"><span class="line_nr">77:</span><div style="display: inline;"><span class="original comment">******************************/</span></div></td></tr>
+<tr><td class="loc" id="loc-78"><span class="line_nr">78:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">include</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div><div style="display: inline;"><span class="original identifier">stddef</span></div><div style="display: inline;"><span class="original punctuation">.</span></div><div style="display: inline;"><span class="original identifier">h</span></div><div style="display: inline;"><span class="original punctuation">&gt;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* size_t */</span></div></td></tr>
+<tr><td class="loc" id="loc-79"><span class="line_nr">79:</span><div style="display: inline;"><span class="original keyword">typedef</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">enum</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_OK</span></div><div style="display: inline;"><span class="original punctuation">=</span></div><div style="display: inline;"><span class="original literal">0</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_ERROR</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_errorcode</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-80"><span class="line_nr">80:</span></td></tr>
+<tr><td class="loc" id="loc-81"><span class="line_nr">81:</span></td></tr>
+<tr><td class="loc" id="loc-82"><span class="line_nr">82:</span><div style="display: inline;"><span class="original comment">/* ****************************</span></div></td></tr>
+<tr><td class="loc" id="loc-83"><span class="line_nr">83:</span><div style="display: inline;"><span class="original comment"> *  API modifier</span></div></td></tr>
+<tr><td class="loc" id="loc-84"><span class="line_nr">84:</span><div style="display: inline;"><span class="original comment"> ******************************/</span></div></td></tr>
+<tr><td class="loc" id="loc-85"><span class="line_nr">85:</span><div style="display: inline;"><span class="original comment">/** XXH_INLINE_ALL (and XXH_PRIVATE_API)</span></div></td></tr>
+<tr><td class="loc" id="loc-86"><span class="line_nr">86:</span><div style="display: inline;"><span class="original comment"> *  This is useful to include xxhash functions in `static` mode</span></div></td></tr>
+<tr><td class="loc" id="loc-87"><span class="line_nr">87:</span><div style="display: inline;"><span class="original comment"> *  in order to inline them, and remove their symbol from the public list.</span></div></td></tr>
+<tr><td class="loc" id="loc-88"><span class="line_nr">88:</span><div style="display: inline;"><span class="original comment"> *  Inlining can offer dramatic performance improvement on small keys.</span></div></td></tr>
+<tr><td class="loc" id="loc-89"><span class="line_nr">89:</span><div style="display: inline;"><span class="original comment"> *  Methodology :</span></div></td></tr>
+<tr><td class="loc" id="loc-90"><span class="line_nr">90:</span><div style="display: inline;"><span class="original comment"> *     #define XXH_INLINE_ALL</span></div></td></tr>
+<tr><td class="loc" id="loc-91"><span class="line_nr">91:</span><div style="display: inline;"><span class="original comment"> *     #include &quot;xxhash.h&quot;</span></div></td></tr>
+<tr><td class="loc" id="loc-92"><span class="line_nr">92:</span><div style="display: inline;"><span class="original comment"> * `xxhash.c` is automatically included.</span></div></td></tr>
+<tr><td class="loc" id="loc-93"><span class="line_nr">93:</span><div style="display: inline;"><span class="original comment"> *  It's not useful to compile and link it as a separate module.</span></div></td></tr>
+<tr><td class="loc" id="loc-94"><span class="line_nr">94:</span><div style="display: inline;"><span class="original comment"> */</span></div></td></tr>
+<tr><td class="loc" id="loc-95"><span class="line_nr">95:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">defined</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_INLINE_ALL</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">||</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">defined</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_PRIVATE_API</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-96"><span class="line_nr">96:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">ifndef</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_STATIC_LINKING_ONLY</span></div></td></tr>
+<tr><td class="loc" id="loc-97"><span class="line_nr">97:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_STATIC_LINKING_ONLY</span></div></td></tr>
+<tr><td class="loc" id="loc-98"><span class="line_nr">98:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">endif</span></div></td></tr>
+<tr><td class="loc" id="loc-99"><span class="line_nr">99:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">defined</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__GNUC__</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-100"><span class="line_nr">100:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">static</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">__inline</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">__attribute__</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">unused</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-101"><span class="line_nr">101:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">elif</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">defined</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__cplusplus</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">||</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">defined</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__STDC_VERSION__</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__STDC_VERSION__</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;=</span></div>&nbsp;<div style="display: inline;"><span class="original literal">199901L</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original comment">/* C99 */</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-102"><span class="line_nr">102:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">static</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">inline</span></div></td></tr>
+<tr><td class="loc" id="loc-103"><span class="line_nr">103:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">elif</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">defined</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">_MSC_VER</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-104"><span class="line_nr">104:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">static</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">__inline</span></div></td></tr>
+<tr><td class="loc" id="loc-105"><span class="line_nr">105:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">else</span></div></td></tr>
+<tr><td class="loc" id="loc-106"><span class="line_nr">106:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* this version may generate warnings for unused static functions */</span></div></td></tr>
+<tr><td class="loc" id="loc-107"><span class="line_nr">107:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">static</span></div></td></tr>
+<tr><td class="loc" id="loc-108"><span class="line_nr">108:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">endif</span></div></td></tr>
+<tr><td class="loc" id="loc-109"><span class="line_nr">109:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original keyword">else</span></div></td></tr>
+<tr><td class="loc" id="loc-110"><span class="line_nr">110:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* do nothing */</span></div></td></tr>
+<tr><td class="loc" id="loc-111"><span class="line_nr">111:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">endif</span></div>&nbsp;<div style="display: inline;"><span class="original comment">/* XXH_INLINE_ALL || XXH_PRIVATE_API */</span></div></td></tr>
+<tr><td class="loc" id="loc-112"><span class="line_nr">112:</span></td></tr>
+<tr><td class="loc" id="loc-113"><span class="line_nr">113:</span><div style="display: inline;"><span class="original comment">/*! XXH_NAMESPACE, aka Namespace Emulation :</span></div></td></tr>
+<tr><td class="loc" id="loc-114"><span class="line_nr">114:</span><div style="display: inline;"><span class="original comment"> *</span></div></td></tr>
+<tr><td class="loc" id="loc-115"><span class="line_nr">115:</span><div style="display: inline;"><span class="original comment"> * If you want to include _and expose_ xxHash functions from within your own library,</span></div></td></tr>
+<tr><td class="loc" id="loc-116"><span class="line_nr">116:</span><div style="display: inline;"><span class="original comment"> * but also want to avoid symbol collisions with other libraries which may also include xxHash,</span></div></td></tr>
+<tr><td class="loc" id="loc-117"><span class="line_nr">117:</span><div style="display: inline;"><span class="original comment"> *</span></div></td></tr>
+<tr><td class="loc" id="loc-118"><span class="line_nr">118:</span><div style="display: inline;"><span class="original comment"> * you can use XXH_NAMESPACE, to automatically prefix any public symbol from xxhash library</span></div></td></tr>
+<tr><td class="loc" id="loc-119"><span class="line_nr">119:</span><div style="display: inline;"><span class="original comment"> * with the value of XXH_NAMESPACE (therefore, avoid NULL and numeric values).</span></div></td></tr>
+<tr><td class="loc" id="loc-120"><span class="line_nr">120:</span><div style="display: inline;"><span class="original comment"> *</span></div></td></tr>
+<tr><td class="loc" id="loc-121"><span class="line_nr">121:</span><div style="display: inline;"><span class="original comment"> * Note that no change is required within the calling program as long as it includes `xxhash.h` :</span></div></td></tr>
+<tr><td class="loc" id="loc-122"><span class="line_nr">122:</span><div style="display: inline;"><span class="original comment"> * regular symbol name will be automatically translated by this header.</span></div></td></tr>
+<tr><td class="loc" id="loc-123"><span class="line_nr">123:</span><div style="display: inline;"><span class="original comment"> */</span></div></td></tr>
+<tr><td class="loc" id="loc-124"><span class="line_nr">124:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">ifdef</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div></td></tr>
+<tr><td class="loc" id="loc-125"><span class="line_nr">125:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_CAT</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">A</span></div><div style="display: inline;"><span class="original punctuation">,</span></div><div style="display: inline;"><span class="original identifier">B</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">A</span></div><div style="display: inline;"><span class="original punctuation">##</span></div><div style="display: inline;"><span class="original identifier">B</span></div></td></tr>
+<tr><td class="loc" id="loc-126"><span class="line_nr">126:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">A</span></div><div style="display: inline;"><span class="original punctuation">,</span></div><div style="display: inline;"><span class="original identifier">B</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_CAT</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">A</span></div><div style="display: inline;"><span class="original punctuation">,</span></div><div style="display: inline;"><span class="original identifier">B</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-127"><span class="line_nr">127:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_versionNumber</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_versionNumber</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-128"><span class="line_nr">128:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-129"><span class="line_nr">129:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_createState</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_createState</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-130"><span class="line_nr">130:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_freeState</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_freeState</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-131"><span class="line_nr">131:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_reset</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_reset</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-132"><span class="line_nr">132:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_update</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_update</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-133"><span class="line_nr">133:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_digest</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_digest</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-134"><span class="line_nr">134:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_copyState</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_copyState</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-135"><span class="line_nr">135:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_canonicalFromHash</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_canonicalFromHash</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-136"><span class="line_nr">136:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_hashFromCanonical</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_hashFromCanonical</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-137"><span class="line_nr">137:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-138"><span class="line_nr">138:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_createState</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_createState</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-139"><span class="line_nr">139:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_freeState</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_freeState</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-140"><span class="line_nr">140:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_reset</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_reset</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-141"><span class="line_nr">141:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_update</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_update</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-142"><span class="line_nr">142:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_digest</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_digest</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-143"><span class="line_nr">143:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_copyState</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_copyState</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-144"><span class="line_nr">144:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_canonicalFromHash</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_canonicalFromHash</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-145"><span class="line_nr">145:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_hashFromCanonical</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NAME2</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_NAMESPACE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_hashFromCanonical</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-146"><span class="line_nr">146:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">endif</span></div></td></tr>
+<tr><td class="loc" id="loc-147"><span class="line_nr">147:</span></td></tr>
+<tr><td class="loc" id="loc-148"><span class="line_nr">148:</span></td></tr>
+<tr><td class="loc" id="loc-149"><span class="line_nr">149:</span><div style="display: inline;"><span class="original comment">/* *************************************</span></div></td></tr>
+<tr><td class="loc" id="loc-150"><span class="line_nr">150:</span><div style="display: inline;"><span class="original comment">*  Version</span></div></td></tr>
+<tr><td class="loc" id="loc-151"><span class="line_nr">151:</span><div style="display: inline;"><span class="original comment">***************************************/</span></div></td></tr>
+<tr><td class="loc" id="loc-152"><span class="line_nr">152:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_VERSION_MAJOR</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original literal">0</span></div></td></tr>
+<tr><td class="loc" id="loc-153"><span class="line_nr">153:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_VERSION_MINOR</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original literal">6</span></div></td></tr>
+<tr><td class="loc" id="loc-154"><span class="line_nr">154:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_VERSION_RELEASE</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original literal">5</span></div></td></tr>
+<tr><td class="loc" id="loc-155"><span class="line_nr">155:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_VERSION_NUMBER</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_VERSION_MAJOR</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">*</span></div><div style="display: inline;"><span class="original literal">100</span></div><div style="display: inline;"><span class="original punctuation">*</span></div><div style="display: inline;"><span class="original literal">100</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_VERSION_MINOR</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">*</span></div><div style="display: inline;"><span class="original literal">100</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_VERSION_RELEASE</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-156"><span class="line_nr">156:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_versionNumber</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">void</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-157"><span class="line_nr">157:</span></td></tr>
+<tr><td class="loc" id="loc-158"><span class="line_nr">158:</span></td></tr>
+<tr><td class="loc" id="loc-159"><span class="line_nr">159:</span><div style="display: inline;"><span class="original comment">/*-**********************************************************************</span></div></td></tr>
+<tr><td class="loc" id="loc-160"><span class="line_nr">160:</span><div style="display: inline;"><span class="original comment">*  32-bit hash</span></div></td></tr>
+<tr><td class="loc" id="loc-161"><span class="line_nr">161:</span><div style="display: inline;"><span class="original comment">************************************************************************/</span></div></td></tr>
+<tr><td class="loc" id="loc-162"><span class="line_nr">162:</span><div style="display: inline;"><span class="original keyword">typedef</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">int</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_hash_t</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-163"><span class="line_nr">163:</span></td></tr>
+<tr><td class="loc" id="loc-164"><span class="line_nr">164:</span><div style="display: inline;"><span class="original comment">/*! XXH32() :</span></div></td></tr>
+<tr><td class="loc" id="loc-165"><span class="line_nr">165:</span><div style="display: inline;"><span class="original comment">    Calculate the 32-bit hash of sequence &quot;length&quot; bytes stored at memory address &quot;input&quot;.</span></div></td></tr>
+<tr><td class="loc" id="loc-166"><span class="line_nr">166:</span><div style="display: inline;"><span class="original comment">    The memory between input &amp; input+length must be valid (allocated and read-accessible).</span></div></td></tr>
+<tr><td class="loc" id="loc-167"><span class="line_nr">167:</span><div style="display: inline;"><span class="original comment">    &quot;seed&quot; can be used to alter the result predictably.</span></div></td></tr>
+<tr><td class="loc" id="loc-168"><span class="line_nr">168:</span><div style="display: inline;"><span class="original comment">    Speed on Core 2 Duo @ 3 GHz (single thread, SMHasher benchmark) : 5.4 GB/s */</span></div></td></tr>
+<tr><td class="loc" id="loc-169"><span class="line_nr">169:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_hash_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">void</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">input</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">length</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">int</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-170"><span class="line_nr">170:</span></td></tr>
+<tr><td class="loc" id="loc-171"><span class="line_nr">171:</span><div style="display: inline;"><span class="original comment">/*======   Streaming   ======*/</span></div></td></tr>
+<tr><td class="loc" id="loc-172"><span class="line_nr">172:</span><div style="display: inline;"><span class="original keyword">typedef</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">struct</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_state_s</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_state_t</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* incomplete type */</span></div></td></tr>
+<tr><td class="loc" id="loc-173"><span class="line_nr">173:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_createState</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">void</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-174"><span class="line_nr">174:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_errorcode</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_freeState</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH32_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">statePtr</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-175"><span class="line_nr">175:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">void</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_copyState</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH32_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">dst_state</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">src_state</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-176"><span class="line_nr">176:</span></td></tr>
+<tr><td class="loc" id="loc-177"><span class="line_nr">177:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_errorcode</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_reset</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH32_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">statePtr</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">int</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-178"><span class="line_nr">178:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_errorcode</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_update</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH32_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">statePtr</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">void</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">input</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">length</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-179"><span class="line_nr">179:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_hash_t</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_digest</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">statePtr</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-180"><span class="line_nr">180:</span></td></tr>
+<tr><td class="loc" id="loc-181"><span class="line_nr">181:</span><div style="display: inline;"><span class="original comment">/*</span></div></td></tr>
+<tr><td class="loc" id="loc-182"><span class="line_nr">182:</span><div style="display: inline;"><span class="original comment"> * Streaming functions generate the xxHash of an input provided in multiple segments.</span></div></td></tr>
+<tr><td class="loc" id="loc-183"><span class="line_nr">183:</span><div style="display: inline;"><span class="original comment"> * Note that, for small input, they are slower than single-call functions, due to state management.</span></div></td></tr>
+<tr><td class="loc" id="loc-184"><span class="line_nr">184:</span><div style="display: inline;"><span class="original comment"> * For small inputs, prefer `XXH32()` and `XXH64()`, which are better optimized.</span></div></td></tr>
+<tr><td class="loc" id="loc-185"><span class="line_nr">185:</span><div style="display: inline;"><span class="original comment"> *</span></div></td></tr>
+<tr><td class="loc" id="loc-186"><span class="line_nr">186:</span><div style="display: inline;"><span class="original comment"> * XXH state must first be allocated, using XXH*_createState() .</span></div></td></tr>
+<tr><td class="loc" id="loc-187"><span class="line_nr">187:</span><div style="display: inline;"><span class="original comment"> *</span></div></td></tr>
+<tr><td class="loc" id="loc-188"><span class="line_nr">188:</span><div style="display: inline;"><span class="original comment"> * Start a new hash by initializing state with a seed, using XXH*_reset().</span></div></td></tr>
+<tr><td class="loc" id="loc-189"><span class="line_nr">189:</span><div style="display: inline;"><span class="original comment"> *</span></div></td></tr>
+<tr><td class="loc" id="loc-190"><span class="line_nr">190:</span><div style="display: inline;"><span class="original comment"> * Then, feed the hash state by calling XXH*_update() as many times as necessary.</span></div></td></tr>
+<tr><td class="loc" id="loc-191"><span class="line_nr">191:</span><div style="display: inline;"><span class="original comment"> * The function returns an error code, with 0 meaning OK, and any other value meaning there is an error.</span></div></td></tr>
+<tr><td class="loc" id="loc-192"><span class="line_nr">192:</span><div style="display: inline;"><span class="original comment"> *</span></div></td></tr>
+<tr><td class="loc" id="loc-193"><span class="line_nr">193:</span><div style="display: inline;"><span class="original comment"> * Finally, a hash value can be produced anytime, by using XXH*_digest().</span></div></td></tr>
+<tr><td class="loc" id="loc-194"><span class="line_nr">194:</span><div style="display: inline;"><span class="original comment"> * This function returns the nn-bits hash as an int or long long.</span></div></td></tr>
+<tr><td class="loc" id="loc-195"><span class="line_nr">195:</span><div style="display: inline;"><span class="original comment"> *</span></div></td></tr>
+<tr><td class="loc" id="loc-196"><span class="line_nr">196:</span><div style="display: inline;"><span class="original comment"> * It's still possible to continue inserting input into the hash state after a digest,</span></div></td></tr>
+<tr><td class="loc" id="loc-197"><span class="line_nr">197:</span><div style="display: inline;"><span class="original comment"> * and generate some new hashes later on, by calling again XXH*_digest().</span></div></td></tr>
+<tr><td class="loc" id="loc-198"><span class="line_nr">198:</span><div style="display: inline;"><span class="original comment"> *</span></div></td></tr>
+<tr><td class="loc" id="loc-199"><span class="line_nr">199:</span><div style="display: inline;"><span class="original comment"> * When done, free XXH state space if it was allocated dynamically.</span></div></td></tr>
+<tr><td class="loc" id="loc-200"><span class="line_nr">200:</span><div style="display: inline;"><span class="original comment"> */</span></div></td></tr>
+<tr><td class="loc" id="loc-201"><span class="line_nr">201:</span></td></tr>
+<tr><td class="loc" id="loc-202"><span class="line_nr">202:</span><div style="display: inline;"><span class="original comment">/*======   Canonical representation   ======*/</span></div></td></tr>
+<tr><td class="loc" id="loc-203"><span class="line_nr">203:</span></td></tr>
+<tr><td class="loc" id="loc-204"><span class="line_nr">204:</span><div style="display: inline;"><span class="original keyword">typedef</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">struct</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">char</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">digest</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original literal">4</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_canonical_t</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-205"><span class="line_nr">205:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">void</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_canonicalFromHash</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH32_canonical_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">dst</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_hash_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">hash</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-206"><span class="line_nr">206:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_hash_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_hashFromCanonical</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_canonical_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">src</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-207"><span class="line_nr">207:</span></td></tr>
+<tr><td class="loc" id="loc-208"><span class="line_nr">208:</span><div style="display: inline;"><span class="original comment">/* Default result type for XXH functions are primitive unsigned 32 and 64 bits.</span></div></td></tr>
+<tr><td class="loc" id="loc-209"><span class="line_nr">209:</span><div style="display: inline;"><span class="original comment"> * The canonical representation uses human-readable write convention, aka big-endian (large digits first).</span></div></td></tr>
+<tr><td class="loc" id="loc-210"><span class="line_nr">210:</span><div style="display: inline;"><span class="original comment"> * These functions allow transformation of hash result into and from its canonical format.</span></div></td></tr>
+<tr><td class="loc" id="loc-211"><span class="line_nr">211:</span><div style="display: inline;"><span class="original comment"> * This way, hash values can be written into a file / memory, and remain comparable on different systems and programs.</span></div></td></tr>
+<tr><td class="loc" id="loc-212"><span class="line_nr">212:</span><div style="display: inline;"><span class="original comment"> */</span></div></td></tr>
+<tr><td class="loc" id="loc-213"><span class="line_nr">213:</span></td></tr>
+<tr><td class="loc" id="loc-214"><span class="line_nr">214:</span></td></tr>
+<tr><td class="loc" id="loc-215"><span class="line_nr">215:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">ifndef</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NO_LONG_LONG</span></div></td></tr>
+<tr><td class="loc" id="loc-216"><span class="line_nr">216:</span><div style="display: inline;"><span class="original comment">/*-**********************************************************************</span></div></td></tr>
+<tr><td class="loc" id="loc-217"><span class="line_nr">217:</span><div style="display: inline;"><span class="original comment">*  64-bit hash</span></div></td></tr>
+<tr><td class="loc" id="loc-218"><span class="line_nr">218:</span><div style="display: inline;"><span class="original comment">************************************************************************/</span></div></td></tr>
+<tr><td class="loc" id="loc-219"><span class="line_nr">219:</span><div style="display: inline;"><span class="original keyword">typedef</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_hash_t</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-220"><span class="line_nr">220:</span></td></tr>
+<tr><td class="loc" id="loc-221"><span class="line_nr">221:</span><div style="display: inline;"><span class="original comment">/*! XXH64() :</span></div></td></tr>
+<tr><td class="loc" id="loc-222"><span class="line_nr">222:</span><div style="display: inline;"><span class="original comment">    Calculate the 64-bit hash of sequence of length &quot;len&quot; stored at memory address &quot;input&quot;.</span></div></td></tr>
+<tr><td class="loc" id="loc-223"><span class="line_nr">223:</span><div style="display: inline;"><span class="original comment">    &quot;seed&quot; can be used to alter the result predictably.</span></div></td></tr>
+<tr><td class="loc" id="loc-224"><span class="line_nr">224:</span><div style="display: inline;"><span class="original comment">    This function runs faster on 64-bit systems, but slower on 32-bit systems (see benchmark).</span></div></td></tr>
+<tr><td class="loc" id="loc-225"><span class="line_nr">225:</span><div style="display: inline;"><span class="original comment">*/</span></div></td></tr>
+<tr><td class="loc" id="loc-226"><span class="line_nr">226:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_hash_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">void</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">input</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">length</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-227"><span class="line_nr">227:</span></td></tr>
+<tr><td class="loc" id="loc-228"><span class="line_nr">228:</span><div style="display: inline;"><span class="original comment">/*======   Streaming   ======*/</span></div></td></tr>
+<tr><td class="loc" id="loc-229"><span class="line_nr">229:</span><div style="display: inline;"><span class="original keyword">typedef</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">struct</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_state_s</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_state_t</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* incomplete type */</span></div></td></tr>
+<tr><td class="loc" id="loc-230"><span class="line_nr">230:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_createState</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">void</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-231"><span class="line_nr">231:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_errorcode</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_freeState</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH64_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">statePtr</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-232"><span class="line_nr">232:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">void</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_copyState</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH64_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">dst_state</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">src_state</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-233"><span class="line_nr">233:</span></td></tr>
+<tr><td class="loc" id="loc-234"><span class="line_nr">234:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_errorcode</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_reset</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH64_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">statePtr</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-235"><span class="line_nr">235:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_errorcode</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_update</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH64_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">statePtr</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">void</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">input</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">length</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-236"><span class="line_nr">236:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_hash_t</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_digest</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_state_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">statePtr</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-237"><span class="line_nr">237:</span></td></tr>
+<tr><td class="loc" id="loc-238"><span class="line_nr">238:</span><div style="display: inline;"><span class="original comment">/*======   Canonical representation   ======*/</span></div></td></tr>
+<tr><td class="loc" id="loc-239"><span class="line_nr">239:</span><div style="display: inline;"><span class="original keyword">typedef</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">struct</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">char</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">digest</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original literal">8</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_canonical_t</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-240"><span class="line_nr">240:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">void</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_canonicalFromHash</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH64_canonical_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">dst</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_hash_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">hash</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-241"><span class="line_nr">241:</span><div style="display: inline;"><span class="original identifier">XXH_PUBLIC_API</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_hash_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_hashFromCanonical</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_canonical_t</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">src</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-242"><span class="line_nr">242:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">endif</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* XXH_NO_LONG_LONG */</span></div></td></tr>
+<tr><td class="loc" id="loc-243"><span class="line_nr">243:</span></td></tr>
+<tr><td class="loc" id="loc-244"><span class="line_nr">244:</span></td></tr>
+<tr><td class="loc" id="loc-245"><span class="line_nr">245:</span></td></tr>
+<tr><td class="loc" id="loc-246"><span class="line_nr">246:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">ifdef</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_STATIC_LINKING_ONLY</span></div></td></tr>
+<tr><td class="loc" id="loc-247"><span class="line_nr">247:</span></td></tr>
+<tr><td class="loc" id="loc-248"><span class="line_nr">248:</span><div style="display: inline;"><span class="original comment">/* ================================================================================================</span></div></td></tr>
+<tr><td class="loc" id="loc-249"><span class="line_nr">249:</span><div style="display: inline;"><span class="original comment">   This section contains declarations which are not guaranteed to remain stable.</span></div></td></tr>
+<tr><td class="loc" id="loc-250"><span class="line_nr">250:</span><div style="display: inline;"><span class="original comment">   They may change in future versions, becoming incompatible with a different version of the library.</span></div></td></tr>
+<tr><td class="loc" id="loc-251"><span class="line_nr">251:</span><div style="display: inline;"><span class="original comment">   These declarations should only be used with static linking.</span></div></td></tr>
+<tr><td class="loc" id="loc-252"><span class="line_nr">252:</span><div style="display: inline;"><span class="original comment">   Never use them in association with dynamic linking !</span></div></td></tr>
+<tr><td class="loc" id="loc-253"><span class="line_nr">253:</span><div style="display: inline;"><span class="original comment">=================================================================================================== */</span></div></td></tr>
+<tr><td class="loc" id="loc-254"><span class="line_nr">254:</span></td></tr>
+<tr><td class="loc" id="loc-255"><span class="line_nr">255:</span><div style="display: inline;"><span class="original comment">/* These definitions are only present to allow</span></div></td></tr>
+<tr><td class="loc" id="loc-256"><span class="line_nr">256:</span><div style="display: inline;"><span class="original comment"> * static allocation of XXH state, on stack or in a struct for example.</span></div></td></tr>
+<tr><td class="loc" id="loc-257"><span class="line_nr">257:</span><div style="display: inline;"><span class="original comment"> * Never **ever** use members directly. */</span></div></td></tr>
+<tr><td class="loc" id="loc-258"><span class="line_nr">258:</span></td></tr>
+<tr><td class="loc" id="loc-259"><span class="line_nr">259:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">!</span></div><div style="display: inline;"><span class="original identifier">defined</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__VMS</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-260"><span class="line_nr">260:</span>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">defined</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__cplusplus</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-261"><span class="line_nr">261:</span>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">||</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">defined</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__STDC_VERSION__</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__STDC_VERSION__</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;=</span></div>&nbsp;<div style="display: inline;"><span class="original literal">199901L</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original comment">/* C99 */</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-262"><span class="line_nr">262:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">include</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div><div style="display: inline;"><span class="original identifier">stdint</span></div><div style="display: inline;"><span class="original punctuation">.</span></div><div style="display: inline;"><span class="original identifier">h</span></div><div style="display: inline;"><span class="original punctuation">&gt;</span></div></td></tr>
+<tr><td class="loc" id="loc-263"><span class="line_nr">263:</span></td></tr>
+<tr><td class="loc" id="loc-264"><span class="line_nr">264:</span><div style="display: inline;"><span class="original keyword">struct</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_state_s</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-265"><span class="line_nr">265:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">total_len_32</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-266"><span class="line_nr">266:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">large_len</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-267"><span class="line_nr">267:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v1</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-268"><span class="line_nr">268:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v2</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-269"><span class="line_nr">269:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v3</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-270"><span class="line_nr">270:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v4</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-271"><span class="line_nr">271:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">mem32</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original literal">4</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-272"><span class="line_nr">272:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">memsize</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-273"><span class="line_nr">273:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">reserved</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* never read nor write, might be removed in a future version */</span></div></td></tr>
+<tr><td class="loc" id="loc-274"><span class="line_nr">274:</span><div style="display: inline;"><span class="original punctuation">}</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* typedef'd to XXH32_state_t */</span></div></td></tr>
+<tr><td class="loc" id="loc-275"><span class="line_nr">275:</span></td></tr>
+<tr><td class="loc" id="loc-276"><span class="line_nr">276:</span><div style="display: inline;"><span class="original keyword">struct</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_state_s</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-277"><span class="line_nr">277:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint64_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">total_len</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-278"><span class="line_nr">278:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint64_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v1</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-279"><span class="line_nr">279:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint64_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v2</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-280"><span class="line_nr">280:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint64_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v3</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-281"><span class="line_nr">281:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint64_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v4</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-282"><span class="line_nr">282:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint64_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">mem64</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original literal">4</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-283"><span class="line_nr">283:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">memsize</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-284"><span class="line_nr">284:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">uint32_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">reserved</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original literal">2</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* never read nor write, might be removed in a future version */</span></div></td></tr>
+<tr><td class="loc" id="loc-285"><span class="line_nr">285:</span><div style="display: inline;"><span class="original punctuation">}</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* typedef'd to XXH64_state_t */</span></div></td></tr>
+<tr><td class="loc" id="loc-286"><span class="line_nr">286:</span></td></tr>
+<tr><td class="loc" id="loc-287"><span class="line_nr">287:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">else</span></div></td></tr>
+<tr><td class="loc" id="loc-288"><span class="line_nr">288:</span></td></tr>
+<tr><td class="loc" id="loc-289"><span class="line_nr">289:</span><div style="display: inline;"><span class="original keyword">struct</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH32_state_s</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-290"><span class="line_nr">290:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">total_len_32</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-291"><span class="line_nr">291:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">large_len</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-292"><span class="line_nr">292:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v1</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-293"><span class="line_nr">293:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v2</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-294"><span class="line_nr">294:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v3</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-295"><span class="line_nr">295:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v4</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-296"><span class="line_nr">296:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">mem32</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original literal">4</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-297"><span class="line_nr">297:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">memsize</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-298"><span class="line_nr">298:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">reserved</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* never read nor write, might be removed in a future version */</span></div></td></tr>
+<tr><td class="loc" id="loc-299"><span class="line_nr">299:</span><div style="display: inline;"><span class="original punctuation">}</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* typedef'd to XXH32_state_t */</span></div></td></tr>
+<tr><td class="loc" id="loc-300"><span class="line_nr">300:</span></td></tr>
+<tr><td class="loc" id="loc-301"><span class="line_nr">301:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">ifndef</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH_NO_LONG_LONG</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* remove 64-bit support */</span></div></td></tr>
+<tr><td class="loc" id="loc-302"><span class="line_nr">302:</span><div style="display: inline;"><span class="original keyword">struct</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">XXH64_state_s</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-303"><span class="line_nr">303:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">total_len</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-304"><span class="line_nr">304:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v1</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-305"><span class="line_nr">305:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v2</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-306"><span class="line_nr">306:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v3</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-307"><span class="line_nr">307:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">v4</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-308"><span class="line_nr">308:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">mem64</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original literal">4</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-309"><span class="line_nr">309:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">memsize</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-310"><span class="line_nr">310:</span>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">reserved</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original literal">2</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* never read nor write, might be removed in a future version */</span></div></td></tr>
+<tr><td class="loc" id="loc-311"><span class="line_nr">311:</span><div style="display: inline;"><span class="original punctuation">}</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* typedef'd to XXH64_state_t */</span></div></td></tr>
+<tr><td class="loc" id="loc-312"><span class="line_nr">312:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">endif</span></div></td></tr>
+<tr><td class="loc" id="loc-313"><span class="line_nr">313:</span></td></tr>
+<tr><td class="loc" id="loc-314"><span class="line_nr">314:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">endif</span></div></td></tr>
+<tr><td class="loc" id="loc-315"><span class="line_nr">315:</span></td></tr>
+<tr><td class="loc" id="loc-316"><span class="line_nr">316:</span></td></tr>
+<tr><td class="loc" id="loc-317"><span class="line_nr">317:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">defined</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_INLINE_ALL</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">||</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">defined</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">XXH_PRIVATE_API</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-318"><span class="line_nr">318:</span><div style="display: inline;"><span class="original punctuation">#</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">include</span></div>&nbsp;<div style="display: inline;"><span class="original literal">&quot;xxhash.c&quot;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* include xxhash function bodies as `static`, for inlining */</span></div></td></tr>
+<tr><td class="loc" id="loc-319"><span class="line_nr">319:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">endif</span></div></td></tr>
+<tr><td class="loc" id="loc-320"><span class="line_nr">320:</span></td></tr>
+<tr><td class="loc" id="loc-321"><span class="line_nr">321:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">endif</span></div>&nbsp;<div style="display: inline;"><span class="original comment">/* XXH_STATIC_LINKING_ONLY */</span></div></td></tr>
+<tr><td class="loc" id="loc-322"><span class="line_nr">322:</span></td></tr>
+<tr><td class="loc" id="loc-323"><span class="line_nr">323:</span></td></tr>
+<tr><td class="loc" id="loc-324"><span class="line_nr">324:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">defined</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">__cplusplus</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-325"><span class="line_nr">325:</span><div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-326"><span class="line_nr">326:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">endif</span></div></td></tr>
+<tr><td class="loc" id="loc-327"><span class="line_nr">327:</span></td></tr>
+<tr><td class="loc" id="loc-328"><span class="line_nr">328:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">endif</span></div>&nbsp;<div style="display: inline;"><span class="original comment">/* XXHASH_H_5627135585666179 */</span></div></td></tr>
+</table>
+<script>
+const MAX_NUM_TESTCASES = 0;
+const g_mutids = [];
+const g_mut_st_map = ['unknown','killed','alive','killedByCompiler','timeout','noCoverage'];
+const g_mut_kind_map = ['none','rorLT','rorLE','rorGT','rorGE','rorEQ','rorNE','lcrAnd','lcrOr','aorMul','aorDiv','aorRem','aorAdd','aorSub','aorMulAssign','aorDivAssign','aorRemAssign','aorAddAssign','aorSubAssign','uoiPostInc','uoiPostDec','uoiPreInc','uoiPreDec','uoiAddress','uoiIndirection','uoiPositive','uoiNegative','uoiComplement','uoiNegation','uoiSizeof_','absPos','absNeg','absZero','stmtDel','corAnd','corOr','corFalse','corLhs','corRhs','corEQ','corNE','corTrue','rorTrue','rorFalse','dcrTrue','dcrFalse','dcrBomb','dcrCaseDel','rorpLT','rorpLE','rorpGT','rorpGE','rorpEQ','rorpNE','lcrbAnd','lcrbOr','lcrbAndAssign','lcrbOrAssign','lcrbLhs','lcrbRhs','lcrLhs','lcrRhs','lcrTrue','lcrFalse','aorLhs','aorRhs','uoiDel','dcrReturnTrue','dcrReturnFalse','aorsMul','aorsDiv','aorsAdd','aorsSub','aorsMulAssign','aorsDivAssign','aorsAddAssign','aorsSubAssign'];
+const g_mut_kindGroup_map = ['all','ror','rorp','lcr','aor','uoi','sdl','dcr','lcrb','aors'];
+var g_testcases_kills = {}
+var g_muts_data = {};
+g_muts_data[-1] = {'kind' : null, 'status' : null, 'testCases' : null, 'orgText' : null, 'mutText' : null, 'meta' : null};
+</script></body>
+</html>

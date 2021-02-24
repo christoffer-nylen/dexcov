@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta content="text/html;charset=UTF-8" http-equiv="Content-Type" /><style>
+body {font-family: monospace; font-size: 14px;}
+.stat_tbl      {border-collapse:collapse; border-spacing: 0;border-style: solid;border-width:1px;}
+.stat_tbl    td{border-style: none;}
+.overlap_tbl   {border-collapse:collapse;border-spacing:0;}
+.overlap_tbl td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.overlap_tbl th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.overlap_tbl .tg-g59y{font-weight:bold;background-color:#ffce93;border-color:#000000;text-align:left;vertical-align:top; cursor: pointer;}
+.overlap_tbl .tg-0lax{text-align:left;vertical-align:top}
+.overlap_tbl .tg-0lax_dark{background-color: lightgrey;text-align:left;vertical-align:top}
+
+.vertical_tbl   {border-collapse:collapse;border-spacing:0;}
+.vertical_tbl:before { content:''; padding-top:110%;/* takes width as reference, + 10% for faking some extra padding */ display:inline-block; vertical-align:middle; }
+.vertical_tbl td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.vertical_tbl th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+.vertical_tbl .tg{ font-weight:bold;background-color:#ffce93;border-color:#000000;text-align:left;vertical-align:top;text-align:center; white-space:nowrap; transform-origin:50% 50%; -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg); }
+
+.diff_del {background-color: lightpink;}
+.diff_add {background-color: lightgreen;}
+
+.tbl_header {
+    cursor: pointer;
+}
+i {
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
+}
+
+.right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+}
+
+.left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+}
+
+.up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
+
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+</style><title>programs_datagen.c</title><style>
+
+
+.mutant {display:none; background-color: yellow;}
+.status_alive {background-color: lightpink;}
+.status_noCoverage {background-color: lightpink;}
+.status_killed {background-color: lightgreen;}
+.status_killedByCompiler {background-color: #eeeeee;}
+.status_timeout {background-color: lightgreen;}
+.status_unknown {background-color: lightyellow;}
+.hover_alive {color: lightpink;}
+.hover_noCoverage {color: lightpink;}
+.hover_killed {color: lightgreen;}
+.hover_killedByCompiler {color: #eeeeee;}
+.hover_timeout {color: lightgreen;}
+.hover_unknown {color: lightyellow;}
+.literal {color: darkred;}
+.keyword {color: blue;}
+.comment {color: grey;}
+.line_nr {color: grey;}
+#mousehover {
+    background: grey;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    padding: 5px;
+    display: none;
+    position: absolute;
+    background: #2e3639;
+    color: #fff;
+}
+span.xx_label {
+    font-weight: bold;
+}
+#info_wrapper {
+    position: absolute;
+    width: 99%;
+}
+#info {
+    position: absolute;
+    top: 0;
+    width: 300px;
+    background: grey;
+    border-radius: 0px 0px 0px 10px;
+    -moz-border-radius: 10px;
+    padding: 5px;
+    border: 1px solid;
+    opacity:0.9;
+
+    background: #2e3639;
+}
+#info.fixed {
+    position: fixed;
+}
+#info span {
+    font-size: 80%;
+    color: #fff;
+    font-family: sans-serif;
+}
+#info select {
+    width: 150px;
+}
+#info_line {
+    background: #2e3639;
+    color: #eeeeee;
+}
+.loc {
+    display: table-cell;
+    vertical-align: inherit;
+    background: #ffffff;
+    width: 100%;
+}
+.loc_selected {
+    background: #cecece;
+}
+#filter_wrapper {
+    display: block;
+}
+#filter_wrapper table {
+    background: #394347;
+    display: block
+}
+#filter_wrapper table tr{
+    display: block;
+}
+#filter_wrapper table td {
+    background : #445055;
+    display: block;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+.filter_title {
+    color: #ffffff;
+    font-family: sans-serif;
+}
+#filter_wrapper thead, tbody { display: block; }
+
+#filter_wrapper tbody {
+    width: 100%;
+    height: 135px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#testcases thead, tbody { display: block; }
+#testcases tbody {
+    width: 100%;
+    height: 135px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#testcases {
+    height: 135px;
+    background: #394347;
+    display: block
+}
+#testcases tr{
+    background : #445055;
+    display: block;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding: 2px;
+}
+
+#info_table {
+    width: 100%;
+}
+#locs {
+    display: block;
+    width: max-content;
+}
+#locs  tr{
+    display: block;
+}
+
+#locs td {
+    display: block;
+}
+</style><script>/**
+Copyright: Copyright (c) 2018, Joakim Brännström. All rights reserved.
+License: MPL-2
+Author: Joakim Brännström (joakim.brannstrom@gmx.com)
+
+This Source Code Form is subject to the terms of the Mozilla Public License,
+v.2.0. If a copy of the MPL was not distributed with this file, You can obtain
+one at http://mozilla.org/MPL/2.0/.
+*/
+
+const LOC_TRAVERSE_LOOP = true;
+const MUT_TRAVERSE_NEXT_LOC = true;
+const LOC_SCROLL_TO_ON_TRAVERSE = true;
+
+var g_displayed_testcases = 10; //Number of testcases displayed in the info line
+var g_show_mutant = true;
+var g_active_mutid = 0;
+var g_active_locid = null;
+var g_loc_mutids = {};
+var g_filter_kinds = [];
+var g_filter_status = [];
+
+var key_traverse_locs_up = 'ArrowUp';
+var key_traverse_locs_down = 'ArrowDown';
+var key_traverse_muts_up = 'ArrowLeft';
+var key_traverse_muts_down = 'ArrowRight';
+var key_toggle_show_mutant = 'Numpad0';
+
+
+/**
+ * Initializes event listeners, data and intial state
+ */
+function init() {
+    var current_mutant_selector = document.getElementById('current_mutant');
+    var num_testcases = document.getElementById("num_testcases");
+    current_mutant_selector.addEventListener('change',
+        function(e) { current_mutant_onchange(e); });
+    num_testcases.addEventListener('change',
+        function(e) { on_num_testcases_change(e); });
+    window.addEventListener('resize',
+        on_window_resize);
+    window.addEventListener('keydown',
+        function(e) { on_keyboard_input(e); });
+    g_displayed_testcases = num_testcases.value;
+    num_testcases.max = MAX_NUM_TESTCASES;
+    init_legend();
+    on_window_resize();
+    var locs_table = document.getElementById("locs");
+    var locs = document.getElementsByClassName('loc');
+    for (var i=0; i<locs.length; i++){
+        locs[i].addEventListener('wheel',
+            function(e) { on_loc_wheel(e); });
+        locs[i].addEventListener('click',
+            function(e) { on_loc_click(e); });
+
+        // Get all mutant ids in the loc.
+        muts = locs[i].getElementsByClassName('mutant');
+        g_loc_mutids[locs[i].id] = [];
+        for (var j=0; j<muts.length; j++) {
+            g_loc_mutids[locs[i].id].push(muts[j].id);
+        }
+    }
+    select_loc(locs[0].id);
+    //Select loc or mutant by hash
+    var mutid = -1;
+    var hash = window.location.hash.substring(1);
+    if (document.getElementById(hash)) {
+        if (document.getElementById(hash).classList.contains('mutant')) {
+            mutid = hash;
+            set_active_mutant(mutid);
+            highlight_mutant(mutid);
+            select_loc(get_closest_loc(document.getElementById(mutid)).id, true);
+        } else if (document.getElementById(hash).classList.contains('loc')) {
+            select_loc(hash, true);
+        }
+    }
+    click_show_legend();
+    click_show_mutant();
+    init_filter_kind();
+    init_filter_status();
+    document.body.focus();
+}
+/**
+ * Toggles whether to show the legend or not
+ */
+function click_show_legend() {
+    var show_legend = document.getElementById("show_legend").checked;
+    var legend = document.getElementById("legend_box");
+    if (show_legend) {
+        legend.style.display = "inline";
+    } else {
+        legend.style.display = "none";
+    }
+}
+function on_num_testcases_change(e) {
+    num_testcases = e.target;
+    if (num_testcases.value != g_displayed_testcases) {
+        g_displayed_testcases = num_testcases.value;
+        set_info_line(g_active_mutid);
+    }
+}
+/**
+ * Manages all keyboard bindings
+ * @param {event} e the captured keyboard event
+ */
+function on_keyboard_input(e) {
+    switch (e.code) {
+        case key_traverse_locs_down:
+            e.preventDefault();
+            traverse_locs(1);
+            break;
+        case key_traverse_locs_up:
+            e.preventDefault();
+            traverse_locs(-1);
+            break;
+        case key_traverse_muts_down:
+            traverse_mutants(1);
+            break;
+        case key_traverse_muts_up:
+            traverse_mutants(-1);
+            break;
+        case key_toggle_show_mutant:
+            document.getElementById("show_mutant").checked = !document.getElementById("show_mutant").checked
+            click_show_mutant();
+    }
+    return;
+}
+/**
+ * Traverses mutants if a scroll event is captured in the selected loc
+ * @param {event} e the captured scrool event
+ */
+function on_loc_wheel(e) {
+    var loc = get_closest_loc(e.target);
+    if(loc.id === g_active_locid) {
+        e.preventDefault();
+        traverse_mutants(e.deltaY);
+    }
+    return;
+}
+/**
+ * Selects a loc when any element within it captures a click event.
+ * @param {event} e the captured click event
+ */
+function on_loc_click(e) {
+    if (!e.target.classList.contains("loc") && e.target.onclick != null)
+        return;
+    var loc = get_closest_loc(e.target);
+    if (loc) {
+        select_loc(loc.id);
+    } else {
+        select_loc(g_active_locid);
+    }
+    return;
+}
+/**
+ * Selects the loc with the given id.
+ * @param {id} loc_id the id of the loc to select
+ * @param {boolean} pure false if active mutant and mutation options are to be cleared.
+ */
+function select_loc(loc_id, pure) {
+    locs = document.getElementsByClassName('loc');
+    if(g_active_locid){
+        document.getElementById(g_active_locid).classList.toggle("loc_selected");
+        remove_info_line();
+    }
+    loc = document.getElementById(loc_id);
+    g_active_locid = loc.id;
+    loc.classList.toggle("loc_selected");
+    if(!pure) {
+        set_active_mutant(-1);
+        deactivate_mutants();
+        clear_mutation_options();
+    }
+    show_info_line();
+    set_mutation_options(g_active_locid);
+}
+function show_info_line() {
+    if (!document.getElementById(g_active_locid).getElementsByClassName("mutant").length)
+        return;
+    var loc_table = document.getElementById("locs");
+    var line = g_active_locid.split('-',2)[1];
+    var info_row = loc_table.insertRow(line);
+
+    info_row.innerHTML = `
+    <td id='info_line'>
+    <table id='info_table'>
+        <tr id="loc_muts_info"></tr>
+        <tr>
+            <td><table id="testcases" ></table</td>
+        </tr>
+    </table>
+    </td>
+    `;
+    set_info_line(g_active_mutid);
+}
+function remove_info_line() {
+    if (!document.getElementById("info_line"))
+        return;
+    var line = g_active_locid.split('-',2)[1];
+    document.getElementById("locs").deleteRow(line);
+}
+function set_info_line(mutid) {
+    if (!document.getElementById(g_active_locid).getElementsByClassName("mutant").length)
+        return;
+
+    var testcases = document.getElementById("testcases");
+    document.getElementById("loc_muts_info").innerHTML = make_td(make_kind_status_info(g_active_locid, mutid));
+    var tcs = g_muts_data[mutid].testCases
+    if (!tcs) {
+        while(testcases.rows.length > 0) {
+            testcases.deleteRow(-1);
+        }
+        return;
+    }
+    while(testcases.rows.length > Math.min(g_displayed_testcases, tcs.length)) {
+        testcases.deleteRow(-1);
+    }
+    for (var i = 0; i < Math.min(g_displayed_testcases, tcs.length); i++) {
+        var id = "tc" + parseInt(i+1);
+        var row = document.getElementById(id)
+        if (!row) {
+            row = testcases.insertRow(i);
+            row.id = id;
+        }
+        var test_case = tcs[i];
+        if (test_case) {
+            row.innerHTML = make_td(test_case + ": "+g_testcases_kills[test_case]);
+        }
+    }
+}
+function make_td(html, id) {
+    if(!id)
+        return "<td>"+html+"</td>";
+    return "<td id='"+id+"'>"+html+"</td>";
+}
+function make_kind_status_info(locid, curr_mutid) {
+    if (curr_mutid == -1) {
+        return "<span>No active mutant</span>";
+    }
+    var mutids = g_loc_mutids[locid];
+    var html ="";
+    for (var i=0; i<mutids.length; i++) {
+        var mutid = mutids[i];
+        var mut = g_muts_data[mutid];
+        if (!g_filter_kinds.includes(mut.kindGroup) &&
+            !g_filter_status.includes(mut.status))
+        {
+            if (mutids[i]==curr_mutid)
+                html+=`<span class="hover_`+g_mut_st_map[mut.status]+`"><b><u>`+g_mut_kind_map[mut.kind]+`</b></u> </span>`;
+            else
+                html+=`<span class="hover_`+g_mut_st_map[mut.status]+`">`+g_mut_kind_map[mut.kind]+` </span>`;
+        }
+    }
+    return html;
+}
+/**
+ * Adds the mutants on the loc for the given id
+ * @param {id} loc_id id of the loc whose mutants to add
+ */
+function set_mutation_options(loc_id) {
+    var mutids = g_loc_mutids[loc_id];
+    var current_mutant_selector = document.getElementById('current_mutant');
+
+    current_mutant_selector.selectedIndex = 0;
+    for (var i = 0; i < mutids.length; i++) {
+        var mutid = mutids[i];
+        var mut = g_muts_data[mutid];
+        if (!g_filter_kinds.includes(mut.kindGroup) &&
+            !g_filter_status.includes(mut.status))
+        {
+            var s = document.createElement('OPTION');
+            s.value = mutid;
+            s.text = mut.mutText;
+            current_mutant_selector.add(s);
+            if (g_active_mutid === s.value)
+                current_mutant_selector.selectedIndex = i+1;
+        }
+    }
+}
+/**
+ * Changes the active mutant on a given line
+ * @param {*} direction positive for next, negative for previous
+ */
+function traverse_mutants(direction) {
+    current_mutant_selector = document.getElementById('current_mutant');
+    selected = current_mutant_selector.selectedIndex;
+
+    if (direction>0) {
+        if (selected+1 < current_mutant_selector.options.length)
+            current_mutant_selector.selectedIndex += 1;
+        else if (MUT_TRAVERSE_NEXT_LOC)
+            traverse_locs(1);
+
+    } else if (direction < 0) {
+        if (selected-1 >= 0)
+            current_mutant_selector.selectedIndex-=1;
+        else if (MUT_TRAVERSE_NEXT_LOC) {
+            traverse_locs(-1);
+            current_mutant_selector.selectedIndex = current_mutant_selector.options.length-1;
+        }
+    }
+    var mutid = current_mutant_selector.value;
+    set_active_mutant(mutid);
+    highlight_mutant(mutid);
+    if (mutid != -1)
+        scroll_to(mutid);
+    else
+        scroll_to(g_active_locid);
+    set_info_line(mutid);
+}
+/**
+ * Changes the active line
+ * @param {*} direction positive for next, negative for previous
+ */
+function traverse_locs(direction) {
+    locs = document.getElementsByClassName('loc');
+    var old_active_locid = g_active_locid;
+    for (var i = 0; i < locs.length; i++) {
+        if (locs[i].id === g_active_locid) {
+            if (direction > 0) {
+                if (i+1 < locs.length)
+                    select_loc(locs[i+1].id);
+                else if (LOC_TRAVERSE_LOOP)
+                    select_loc(locs[0].id);
+            } else if (direction < 0) {
+                if (i-1 >= 0)
+                    select_loc(locs[i-1].id);
+                else if (LOC_TRAVERSE_LOOP)
+                    select_loc(locs[locs.length-1].id);
+            }
+            break;
+        }
+    }
+    if (old_active_locid !== g_active_locid && LOC_SCROLL_TO_ON_TRAVERSE) {
+        scroll_to(g_active_locid, true);
+    }
+    return;
+}
+/**
+ * Gets the closest loc of an element
+ * @param {*} target The target element
+ */
+function get_closest_loc(target) {
+    if (!target)
+        return document.getElementById(g_active_locid);
+    if (target.className === "loc")
+        return target;
+    else
+        return target.closest(".loc");
+}
+/**
+ * Moves the info box when the client window is resized
+ */
+function on_window_resize() {
+    var info_box = document.getElementById('info');
+    var top = info_box.offsetTop - info_box.style.marginTop;
+    var left = window.innerWidth - info_box.clientWidth - 30;
+    info_box.style.left = left + "px";
+    info_box.style.top = top + "px";
+}
+/**
+ * Updates the selected mutant when using the selector
+ * @param {event} e captured change event
+ */
+function current_mutant_onchange(e) {
+    var current_mutant_selector = document.getElementById('current_mutant');
+    var id = current_mutant_selector.value;
+
+    current_mutant_selector.focus();
+    current_mutant_selector.blur();
+    document.body.focus();
+    if (id == -1) {
+        location.hash = "#";
+        set_active_mutant(id);
+        deactivate_mutants();
+        set_info_line(id);
+        return;
+    }
+
+    set_active_mutant(id);
+    highlight_mutant(id);
+    set_info_line(id);
+}
+/**
+ * Removes all options (except the first) from the selector.
+ */
+function clear_mutation_options() {
+    current_mutant_selector = document.getElementById('current_mutant');
+    while (current_mutant_selector.options.length!=1) {
+        current_mutant_selector.options[1]=null;
+    }
+}
+/**
+ * Updates the ui to display the mutant with the given id as selected.
+ */
+function ui_set_mut(id) {
+    loc_id = get_closest_loc(document.getElementById(id)).id
+    if (loc_id != g_active_locid){
+        select_loc(loc_id);
+        return;
+    }
+    mutids = g_loc_mutids[loc_id];
+    set_active_mutant(id);
+    highlight_mutant(id);
+    scroll_to(id, false);
+    set_info_line(id);
+    var current_mutant_selector = document.getElementById('current_mutant');
+    for (var i=0; i<mutids.length; i++) {
+        if (id == mutids[i]) {
+            current_mutant_selector.selectedIndex = i+1;
+            break;
+        }
+    }
+}
+/**
+ * Sets the active mutant id as the given id.
+ * @param {id} mutid id of mutant to set as activate
+ */
+function set_active_mutant(mutid) {
+    if (mutid) {
+        g_active_mutid = mutid;
+    }
+}
+/**
+ * Toggles whether to show mutants or not.
+ */
+function click_show_mutant() {
+    g_show_mutant = document.getElementById("show_mutant").checked;
+    if (g_show_mutant) {
+        highlight_mutant(g_active_mutid);
+    } else {
+        deactivate_mutants();
+    }
+}
+/**
+ * Activates the mutant of the given id.
+ * @param {id} mutid id of the mutant to activate
+ */
+function activate_mutant(mutid) {
+    if (!g_show_mutant) {
+        return;
+    }
+    mut = document.getElementById(mutid);
+    if (mut) {
+        clss = document.getElementsByClassName("mutid" + mutid);
+        if (clss) {
+            for (var i=0; i<clss.length; i++) {
+                clss[i].style.display = 'none';
+            }
+        }
+        mut.style.display = 'inline';
+    }
+}
+/**
+ * Deactivates all mutants
+ */
+function deactivate_mutants() {
+    clear_current_mutant_info();
+    var orgs = document.querySelectorAll(".original");
+    var muts = document.querySelectorAll(".mutant");
+    for (var i=0; i<orgs.length; i++) {
+        orgs[i].style.display = "inline";
+    }
+    for (i=0; i<muts.length; i++) {
+        muts[i].style.display = "none";
+    }
+}
+/**
+ * Highlights the mutant of the given id
+ * @param {id} mutid id of the mutant to highlight
+ */
+function highlight_mutant(mutid) {
+    deactivate_mutants();
+    mut = document.getElementById(mutid);
+    if (!mut)
+        return;
+    if (mut.classList.contains("mutant")) {
+        activate_mutant(mutid);
+        set_current_mutant_info(mutid);
+    }
+}
+function click_filter_kind(kind) {
+    var checkbox = document.getElementById(g_mut_kindGroup_map[kind]);
+    if(checkbox.checked) {
+        for( var i = 0; i < g_filter_kinds.length; i++){
+            if (g_filter_kinds[i] === kind) {
+
+                g_filter_kinds.splice(i, 1);
+            }
+         }
+    }
+    else {
+        g_filter_kinds.push(kind);
+    }
+    set_active_mutant(-1);
+    deactivate_mutants();
+    clear_mutation_options();
+    set_mutation_options(g_active_locid);
+    set_info_line(g_active_mutid);
+}
+function click_filter_status(status) {
+    var checkbox = document.getElementById(g_mut_st_map[status]);
+    if(checkbox.checked) {
+        for( var i = 0; i < g_filter_status.length; i++){
+            if (g_filter_status[i] === status) {
+
+                g_filter_status.splice(i, 1);
+            }
+         }
+    }
+    else {
+        g_filter_status.push(status);
+    }
+    set_active_mutant(-1);
+    deactivate_mutants();
+    clear_mutation_options();
+    set_mutation_options(g_active_locid);
+    set_info_line(g_active_mutid);
+}
+function set_current_mutant_info(mutid) {
+    mut = g_muts_data[mutid];
+    document.getElementById("current_mutant_status").innerText = g_mut_st_map[mut.status];
+    document.getElementById("current_mutant_metadata").innerText = mut.meta;
+    document.getElementById("current_mutant_id").innerText = mutid;
+    document.getElementById("current_mutant_original").innerText = mut.orgText;
+}
+/**
+ * Clears the info box of mutant related text.
+ */
+function clear_current_mutant_info(){
+    document.getElementById("current_mutant_status").innerText = "";
+    document.getElementById("current_mutant_metadata").innerText = "";
+    document.getElementById("current_mutant_id").innerText = "";
+    document.getElementById("current_mutant_original").innerText = "";
+}
+/**
+ * Displays info about all mutants in the same place as the mutant being hovered.
+ * @param {event} evt the captured event
+ * @param {innerHTML} html The inner html to be displayed.
+ */
+function fly(evt, html) {
+    var el = document.getElementById("mousehover");
+    if (evt.type == "mouseenter") {
+        el.style.display = "inline";
+    } else {
+        el.style.display = "none";
+    }
+
+    el.innerHTML = html;
+    el.style.left = (evt.pageX + 30) + 'px';
+    el.style.top = (evt.pageY + 30) + 'px';
+}
+/**
+ * Scrolls to the element of the given anchor
+ * @param {id} anchor the id of the element to scroll to
+ * @param {boolean} center whether to centre the page on the anchor
+ */
+function scroll_to(anchor, center) {
+    var curr_pos = window.pageYOffset;
+    location.hash = "#" + anchor; //Removing this allows for using the browser back button.
+    if (center) {
+        var newpos = document.getElementById(anchor).offsetTop - window.innerHeight/2;
+        if (newpos > 0) {
+            window.scrollTo(0, newpos);
+        }
+        else {
+            window.scrollTo(0, 0);
+        }
+    } else {
+        window.scrollTo(0, curr_pos);
+    }
+}
+// Move most of this to html at some point
+function init_legend() {
+   document.getElementById("legend1_action").innerHTML = "Next line: ";
+   document.getElementById("legend2_action").innerHTML = "Prev line: ";
+   document.getElementById("legend3_action").innerHTML = "Next mutant: ";
+   document.getElementById("legend4_action").innerHTML = "Prev mutant: ";
+   document.getElementById("legend5_action").innerHTML = "Toggle show: ";
+   document.getElementById("legend1_key").innerHTML = key_traverse_locs_down;
+   document.getElementById("legend2_key").innerHTML = key_traverse_locs_up;
+   document.getElementById("legend3_key").innerHTML = key_traverse_muts_down;
+   document.getElementById("legend4_key").innerHTML = key_traverse_muts_up;
+   document.getElementById("legend5_key").innerHTML = key_toggle_show_mutant;
+}
+function init_filter_kind() {
+    var table = document.getElementById("filter_kind");
+
+    for (var i=0; i < g_mut_kindGroup_map.length; i++) {
+        var row = table.insertRow(i);
+        row.innerHTML = `<td><input id="`+g_mut_kindGroup_map[i]+ `" type="checkbox" onclick='click_filter_kind(`+i+`)' checked />
+                        <span class="xx_label">`+g_mut_kindGroup_map[i]+`</span></td>`;
+    }
+}
+function init_filter_status() {
+    var table = document.getElementById("filter_status");
+
+    for (var i=0; i<g_mut_st_map.length; i++) {
+        var row = table.insertRow(i);
+        row.innerHTML = `<td><input id="`+g_mut_st_map[i]+ `" type="checkbox" onclick='click_filter_status(`+i+`)' checked />
+        <span class="xx_label">`+g_mut_st_map[i]+`</span></td>`;
+    }
+    return;
+}
+</script></head>
+<body onload="javascript:init();"><div id="mousehover"></div>
+<div id="info_wrapper">
+<div class="fixed" id="info">
+<table>
+  <tr>
+    <td><span class="xx_label">Id: </span> <span id="current_mutant_id"></span></td>
+    <td></td>
+    <td><a href="../index.html" style="color: white">To index</a></td>
+  </tr>
+  <tr>
+    <td><span class="xx_label">Original: </span></td>
+    <td><span id="current_mutant_original"></span></td>
+    <td><input id="show_legend" onclick="click_show_legend(this)" type="checkbox" /><span class="xx_label" id="legend">Legend</span></td>
+  </tr>
+  <tr>
+    <td><span class="xx_label">Status: </span></td>
+    <td><span id="current_mutant_status"></span></td>
+    <td><span id="current_mutant_metadata"></span></td>
+  </tr>
+  <tr>
+    <td><span class="xx_label">Mutant: </span></td>
+    <td>
+      <select id="current_mutant">
+        <option selected="selected" value="-1">Original</option>
+      </select>
+    </td>
+    <td><input checked="checked" id="show_mutant" onclick="click_show_mutant(this)" type="checkbox" /><span class="xx_label">Show</span></td>
+  </tr>
+</table>
+<div id="filter_wrapper">
+<p class="filter_title">Testcases to display</p>
+<input id="num_testcases" max="10" min="0" step="1" type="number" value="5" />
+<p class="filter_title">Filter by kind</p>
+<table id="filter_kind">
+</table>
+<p class="filter_title">Filter by status</p>
+<table id="filter_status">
+</table>
+</div>
+<table id="legend_box" style="display: none;">
+  <tr id="legend1">
+    <td><span class="xx_label" id="legend1_action"></span></td>
+    <td><span id="legend1_key"></span></td>
+  </tr>
+  <tr id="legend2">
+    <td><span class="xx_label" id="legend2_action"></span></td>
+    <td><span id="legend2_key"></span></td>
+  </tr>
+  <tr id="legend3">
+    <td><span class="xx_label" id="legend3_action"></span></td>
+    <td><span id="legend3_key"></span></td>
+  </tr>
+  <tr id="legend4">
+    <td><span class="xx_label" id="legend4_action"></span></td>
+    <td><span id="legend4_key"></span></td>
+  </tr>
+  <tr id="legend5">
+    <td><span class="xx_label" id="legend5_action"></span></td>
+    <td><span id="legend5_key"></span></td>
+  </tr>
+</table>
+</div>
+</div>
+<table cellpadding="0" id="locs"><tr><td class="loc" id="loc-1"><span class="line_nr">1:</span><div style="display: inline;"><span class="original comment">/*</span></div></td></tr><tr><td class="loc" id="loc-2"><span class="line_nr">2:</span><div style="display: inline;"><span class="original comment">    datagen.c - compressible data generator test tool</span></div></td></tr>
+<tr><td class="loc" id="loc-3"><span class="line_nr">3:</span><div style="display: inline;"><span class="original comment">    Copyright (C) Yann Collet 2012-2020</span></div></td></tr>
+<tr><td class="loc" id="loc-4"><span class="line_nr">4:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-5"><span class="line_nr">5:</span><div style="display: inline;"><span class="original comment">    GPL v2 License</span></div></td></tr>
+<tr><td class="loc" id="loc-6"><span class="line_nr">6:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-7"><span class="line_nr">7:</span><div style="display: inline;"><span class="original comment">    This program is free software; you can redistribute it and/or modify</span></div></td></tr>
+<tr><td class="loc" id="loc-8"><span class="line_nr">8:</span><div style="display: inline;"><span class="original comment">    it under the terms of the GNU General Public License as published by</span></div></td></tr>
+<tr><td class="loc" id="loc-9"><span class="line_nr">9:</span><div style="display: inline;"><span class="original comment">    the Free Software Foundation; either version 2 of the License, or</span></div></td></tr>
+<tr><td class="loc" id="loc-10"><span class="line_nr">10:</span><div style="display: inline;"><span class="original comment">    (at your option) any later version.</span></div></td></tr>
+<tr><td class="loc" id="loc-11"><span class="line_nr">11:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-12"><span class="line_nr">12:</span><div style="display: inline;"><span class="original comment">    This program is distributed in the hope that it will be useful,</span></div></td></tr>
+<tr><td class="loc" id="loc-13"><span class="line_nr">13:</span><div style="display: inline;"><span class="original comment">    but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div></td></tr>
+<tr><td class="loc" id="loc-14"><span class="line_nr">14:</span><div style="display: inline;"><span class="original comment">    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div></td></tr>
+<tr><td class="loc" id="loc-15"><span class="line_nr">15:</span><div style="display: inline;"><span class="original comment">    GNU General Public License for more details.</span></div></td></tr>
+<tr><td class="loc" id="loc-16"><span class="line_nr">16:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-17"><span class="line_nr">17:</span><div style="display: inline;"><span class="original comment">    You should have received a copy of the GNU General Public License along</span></div></td></tr>
+<tr><td class="loc" id="loc-18"><span class="line_nr">18:</span><div style="display: inline;"><span class="original comment">    with this program; if not, write to the Free Software Foundation, Inc.,</span></div></td></tr>
+<tr><td class="loc" id="loc-19"><span class="line_nr">19:</span><div style="display: inline;"><span class="original comment">    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.</span></div></td></tr>
+<tr><td class="loc" id="loc-20"><span class="line_nr">20:</span><div style="display: inline;"><span class="original comment"></span></div></td></tr>
+<tr><td class="loc" id="loc-21"><span class="line_nr">21:</span><div style="display: inline;"><span class="original comment">    You can contact the author at :</span></div></td></tr>
+<tr><td class="loc" id="loc-22"><span class="line_nr">22:</span><div style="display: inline;"><span class="original comment">   - LZ4 source repository : https://github.com/lz4/lz4</span></div></td></tr>
+<tr><td class="loc" id="loc-23"><span class="line_nr">23:</span><div style="display: inline;"><span class="original comment">   - Public forum : https://groups.google.com/forum/#!forum/lz4c</span></div></td></tr>
+<tr><td class="loc" id="loc-24"><span class="line_nr">24:</span><div style="display: inline;"><span class="original comment">*/</span></div></td></tr>
+<tr><td class="loc" id="loc-25"><span class="line_nr">25:</span></td></tr>
+<tr><td class="loc" id="loc-26"><span class="line_nr">26:</span><div style="display: inline;"><span class="original comment">/**************************************</span></div></td></tr>
+<tr><td class="loc" id="loc-27"><span class="line_nr">27:</span><div style="display: inline;"><span class="original comment">*  Includes</span></div></td></tr>
+<tr><td class="loc" id="loc-28"><span class="line_nr">28:</span><div style="display: inline;"><span class="original comment">**************************************/</span></div></td></tr>
+<tr><td class="loc" id="loc-29"><span class="line_nr">29:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">include</span></div>&nbsp;<div style="display: inline;"><span class="original literal">&quot;platform.h&quot;</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* Compiler options, SET_BINARY_MODE */</span></div></td></tr>
+<tr><td class="loc" id="loc-30"><span class="line_nr">30:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">include</span></div>&nbsp;<div style="display: inline;"><span class="original literal">&quot;util.h&quot;</span></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* U32 */</span></div></td></tr>
+<tr><td class="loc" id="loc-31"><span class="line_nr">31:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">include</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div><div style="display: inline;"><span class="original identifier">stdlib</span></div><div style="display: inline;"><span class="original punctuation">.</span></div><div style="display: inline;"><span class="original identifier">h</span></div><div style="display: inline;"><span class="original punctuation">&gt;</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* malloc */</span></div></td></tr>
+<tr><td class="loc" id="loc-32"><span class="line_nr">32:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">include</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div><div style="display: inline;"><span class="original identifier">stdio</span></div><div style="display: inline;"><span class="original punctuation">.</span></div><div style="display: inline;"><span class="original identifier">h</span></div><div style="display: inline;"><span class="original punctuation">&gt;</span></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* FILE, fwrite */</span></div></td></tr>
+<tr><td class="loc" id="loc-33"><span class="line_nr">33:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">include</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div><div style="display: inline;"><span class="original identifier">string</span></div><div style="display: inline;"><span class="original punctuation">.</span></div><div style="display: inline;"><span class="original identifier">h</span></div><div style="display: inline;"><span class="original punctuation">&gt;</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* memcpy */</span></div></td></tr>
+<tr><td class="loc" id="loc-34"><span class="line_nr">34:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">include</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div><div style="display: inline;"><span class="original identifier">assert</span></div><div style="display: inline;"><span class="original punctuation">.</span></div><div style="display: inline;"><span class="original identifier">h</span></div><div style="display: inline;"><span class="original punctuation">&gt;</span></div></td></tr>
+<tr><td class="loc" id="loc-35"><span class="line_nr">35:</span></td></tr>
+<tr><td class="loc" id="loc-36"><span class="line_nr">36:</span></td></tr>
+<tr><td class="loc" id="loc-37"><span class="line_nr">37:</span><div style="display: inline;"><span class="original comment">/**************************************</span></div></td></tr>
+<tr><td class="loc" id="loc-38"><span class="line_nr">38:</span><div style="display: inline;"><span class="original comment">*  Constants</span></div></td></tr>
+<tr><td class="loc" id="loc-39"><span class="line_nr">39:</span><div style="display: inline;"><span class="original comment">**************************************/</span></div></td></tr>
+<tr><td class="loc" id="loc-40"><span class="line_nr">40:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">KB</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">*</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original literal">1</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;&lt;</span></div><div style="display: inline;"><span class="original literal">10</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-41"><span class="line_nr">41:</span></td></tr>
+<tr><td class="loc" id="loc-42"><span class="line_nr">42:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">PRIME1</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original literal">2654435761U</span></div></td></tr>
+<tr><td class="loc" id="loc-43"><span class="line_nr">43:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">PRIME2</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original literal">2246822519U</span></div></td></tr>
+<tr><td class="loc" id="loc-44"><span class="line_nr">44:</span></td></tr>
+<tr><td class="loc" id="loc-45"><span class="line_nr">45:</span></td></tr>
+<tr><td class="loc" id="loc-46"><span class="line_nr">46:</span><div style="display: inline;"><span class="original comment">/**************************************</span></div></td></tr>
+<tr><td class="loc" id="loc-47"><span class="line_nr">47:</span><div style="display: inline;"><span class="original comment">*  Local types</span></div></td></tr>
+<tr><td class="loc" id="loc-48"><span class="line_nr">48:</span><div style="display: inline;"><span class="original comment">**************************************/</span></div></td></tr>
+<tr><td class="loc" id="loc-49"><span class="line_nr">49:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">LTLOG</span></div>&nbsp;<div style="display: inline;"><span class="original literal">13</span></div></td></tr>
+<tr><td class="loc" id="loc-50"><span class="line_nr">50:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">LTSIZE</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original literal">1</span></div><div style="display: inline;"><span class="original punctuation">&lt;&lt;</span></div><div style="display: inline;"><span class="original identifier">LTLOG</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-51"><span class="line_nr">51:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">LTMASK</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">LTSIZE</span></div><div style="display: inline;"><span class="original punctuation">-</span></div><div style="display: inline;"><span class="original literal">1</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-52"><span class="line_nr">52:</span><div style="display: inline;"><span class="original keyword">typedef</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">BYTE</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">litDistribTable</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original identifier">LTSIZE</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-53"><span class="line_nr">53:</span></td></tr>
+<tr><td class="loc" id="loc-54"><span class="line_nr">54:</span></td></tr>
+<tr><td class="loc" id="loc-55"><span class="line_nr">55:</span></td></tr>
+<tr><td class="loc" id="loc-56"><span class="line_nr">56:</span><div style="display: inline;"><span class="original comment">/*********************************************************</span></div></td></tr>
+<tr><td class="loc" id="loc-57"><span class="line_nr">57:</span><div style="display: inline;"><span class="original comment">*  Local Functions</span></div></td></tr>
+<tr><td class="loc" id="loc-58"><span class="line_nr">58:</span><div style="display: inline;"><span class="original comment">*********************************************************/</span></div></td></tr>
+<tr><td class="loc" id="loc-59"><span class="line_nr">59:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">MIN</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">a</span></div><div style="display: inline;"><span class="original punctuation">,</span></div><div style="display: inline;"><span class="original identifier">b</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">a</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">b</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">?</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">a</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">:</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">b</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-60"><span class="line_nr">60:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_rotl32</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">x</span></div><div style="display: inline;"><span class="original punctuation">,</span></div><div style="display: inline;"><span class="original identifier">r</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">x</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">r</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">|</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">x</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;&gt;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original literal">32</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">-</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">r</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-61"><span class="line_nr">61:</span><div style="display: inline;"><span class="original keyword">static</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">int</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_rand</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">U32</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">src</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-62"><span class="line_nr">62:</span><div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-63"><span class="line_nr">63:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">U32</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">rand32</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">*</span></div><div style="display: inline;"><span class="original identifier">src</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-64"><span class="line_nr">64:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">rand32</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">*=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">PRIME1</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-65"><span class="line_nr">65:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">rand32</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">^=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">PRIME2</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-66"><span class="line_nr">66:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">rand32</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_rotl32</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">rand32</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original literal">13</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-67"><span class="line_nr">67:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">*</span></div><div style="display: inline;"><span class="original identifier">src</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">rand32</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-68"><span class="line_nr">68:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">return</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">rand32</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-69"><span class="line_nr">69:</span><div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-70"><span class="line_nr">70:</span></td></tr>
+<tr><td class="loc" id="loc-71"><span class="line_nr">71:</span></td></tr>
+<tr><td class="loc" id="loc-72"><span class="line_nr">72:</span><div style="display: inline;"><span class="original keyword">static</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">void</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_fillLiteralDistrib</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">litDistribTable</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">double</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">ld</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-73"><span class="line_nr">73:</span><div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-74"><span class="line_nr">74:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">BYTE</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">firstChar</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">ld</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;=</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0.0</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">?</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">:</span></div>&nbsp;<div style="display: inline;"><span class="original literal">'('</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-75"><span class="line_nr">75:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">BYTE</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lastChar</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">ld</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;=</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0.0</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">?</span></div>&nbsp;<div style="display: inline;"><span class="original literal">255</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">:</span></div>&nbsp;<div style="display: inline;"><span class="original literal">'}'</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-76"><span class="line_nr">76:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">BYTE</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">character</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">ld</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;=</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0.0</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">?</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">:</span></div>&nbsp;<div style="display: inline;"><span class="original literal">'0'</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-77"><span class="line_nr">77:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">U32</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">u</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-78"><span class="line_nr">78:</span></td></tr>
+<tr><td class="loc" id="loc-79"><span class="line_nr">79:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">while</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">u</span></div><div style="display: inline;"><span class="original punctuation">&lt;</span></div><div style="display: inline;"><span class="original identifier">LTSIZE</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-80"><span class="line_nr">80:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">U32</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">weight</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">U32</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">double</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">LTSIZE</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">-</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">u</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">ld</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original literal">1</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-81"><span class="line_nr">81:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">U32</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">end</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">MIN</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">u</span></div><div style="display: inline;"><span class="original punctuation">+</span></div><div style="display: inline;"><span class="original identifier">weight</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">LTSIZE</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-82"><span class="line_nr">82:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">while</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">u</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">end</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-83"><span class="line_nr">83:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">assert</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">u</span></div><div style="display: inline;"><span class="original punctuation">&lt;</span></div><div style="display: inline;"><span class="original identifier">LTSIZE</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* try to ease static analyzer. u &lt; end &lt;= LTSIZE */</span></div></td></tr>
+<tr><td class="loc" id="loc-84"><span class="line_nr">84:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original identifier">u</span></div><div style="display: inline;"><span class="original punctuation">++</span></div><div style="display: inline;"><span class="original punctuation">]</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">character</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-85"><span class="line_nr">85:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-86"><span class="line_nr">86:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">character</span></div><div style="display: inline;"><span class="original punctuation">++</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-87"><span class="line_nr">87:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">character</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lastChar</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">character</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">firstChar</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-88"><span class="line_nr">88:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-89"><span class="line_nr">89:</span><div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-90"><span class="line_nr">90:</span></td></tr>
+<tr><td class="loc" id="loc-91"><span class="line_nr">91:</span></td></tr>
+<tr><td class="loc" id="loc-92"><span class="line_nr">92:</span><div style="display: inline;"><span class="original keyword">static</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">BYTE</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genChar</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">U32</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">litDistribTable</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-93"><span class="line_nr">93:</span><div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-94"><span class="line_nr">94:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">U32</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">id</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_rand</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">LTMASK</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-95"><span class="line_nr">95:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">return</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original identifier">id</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-96"><span class="line_nr">96:</span><div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-97"><span class="line_nr">97:</span></td></tr>
+<tr><td class="loc" id="loc-98"><span class="line_nr">98:</span></td></tr>
+<tr><td class="loc" id="loc-99"><span class="line_nr">99:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_DICTSIZE</span></div>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original literal">32</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">KB</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-100"><span class="line_nr">100:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_RAND15BITS</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">RDG_rand</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;&gt;</span></div>&nbsp;<div style="display: inline;"><span class="original literal">3</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original literal">32767</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-101"><span class="line_nr">101:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_RANDLENGTH</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">RDG_rand</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;&gt;</span></div>&nbsp;<div style="display: inline;"><span class="original literal">7</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original literal">7</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">?</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">RDG_rand</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original literal">15</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">:</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">RDG_rand</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original literal">511</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original literal">15</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-102"><span class="line_nr">102:</span><div style="display: inline;"><span class="original keyword">void</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genBlock</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">void</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffer</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffSize</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">prefixSize</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">double</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">litDistribTable</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seedPtr</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-103"><span class="line_nr">103:</span><div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-104"><span class="line_nr">104:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">BYTE</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffPtr</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">BYTE</span></div><div style="display: inline;"><span class="original punctuation">*</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original identifier">buffer</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-105"><span class="line_nr">105:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">const</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">U32</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba32</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">U32</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original literal">32768</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-106"><span class="line_nr">106:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">pos</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">prefixSize</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-107"><span class="line_nr">107:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">U32</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seed</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seedPtr</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-108"><span class="line_nr">108:</span></td></tr>
+<tr><td class="loc" id="loc-109"><span class="line_nr">109:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* special case */</span></div></td></tr>
+<tr><td class="loc" id="loc-110"><span class="line_nr">110:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">while</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">matchProba</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;=</span></div>&nbsp;<div style="display: inline;"><span class="original literal">1.0</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-111"><span class="line_nr">111:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size0</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_rand</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original literal">3</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-112"><span class="line_nr">112:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">size0</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">size_t</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original literal">1</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original literal">16</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size0</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original literal">2</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-113"><span class="line_nr">113:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">size0</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_rand</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">size0</span></div><div style="display: inline;"><span class="original punctuation">-</span></div><div style="display: inline;"><span class="original literal">1</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* because size0 is power of 2*/</span></div></td></tr>
+<tr><td class="loc" id="loc-114"><span class="line_nr">114:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">buffSize</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">pos</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size0</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-115"><span class="line_nr">115:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">memset</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">buffPtr</span></div><div style="display: inline;"><span class="original punctuation">+</span></div><div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffSize</span></div><div style="display: inline;"><span class="original punctuation">-</span></div><div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-116"><span class="line_nr">116:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">return</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-117"><span class="line_nr">117:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-118"><span class="line_nr">118:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">memset</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">buffPtr</span></div><div style="display: inline;"><span class="original punctuation">+</span></div><div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size0</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-119"><span class="line_nr">119:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">pos</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size0</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-120"><span class="line_nr">120:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">buffPtr</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">-</span></div><div style="display: inline;"><span class="original literal">1</span></div><div style="display: inline;"><span class="original punctuation">]</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genChar</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-121"><span class="line_nr">121:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-122"><span class="line_nr">122:</span></td></tr>
+<tr><td class="loc" id="loc-123"><span class="line_nr">123:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* init */</span></div></td></tr>
+<tr><td class="loc" id="loc-124"><span class="line_nr">124:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">==</span></div><div style="display: inline;"><span class="original literal">0</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-125"><span class="line_nr">125:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">buffPtr</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original literal">0</span></div><div style="display: inline;"><span class="original punctuation">]</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genChar</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-126"><span class="line_nr">126:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">=</span></div><div style="display: inline;"><span class="original literal">1</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-127"><span class="line_nr">127:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-128"><span class="line_nr">128:</span></td></tr>
+<tr><td class="loc" id="loc-129"><span class="line_nr">129:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* Generate compressible data */</span></div></td></tr>
+<tr><td class="loc" id="loc-130"><span class="line_nr">130:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">while</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">pos</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffSize</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-131"><span class="line_nr">131:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* Select : Literal (char) or Match (within 32K) */</span></div></td></tr>
+<tr><td class="loc" id="loc-132"><span class="line_nr">132:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">RDG_RAND15BITS</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba32</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-133"><span class="line_nr">133:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* Copy (within 32K) */</span></div></td></tr>
+<tr><td class="loc" id="loc-134"><span class="line_nr">134:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">match</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-135"><span class="line_nr">135:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">d</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-136"><span class="line_nr">136:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">int</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">length</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_RANDLENGTH</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original literal">4</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-137"><span class="line_nr">137:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">U32</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">offset</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_RAND15BITS</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original literal">1</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-138"><span class="line_nr">138:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">offset</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">offset</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">U32</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-139"><span class="line_nr">139:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">match</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">pos</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">-</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">offset</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-140"><span class="line_nr">140:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">d</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">pos</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">length</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-141"><span class="line_nr">141:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">d</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffSize</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">d</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffSize</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-142"><span class="line_nr">142:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">while</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">pos</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">d</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffPtr</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">++</span></div><div style="display: inline;"><span class="original punctuation">]</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffPtr</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original identifier">match</span></div><div style="display: inline;"><span class="original punctuation">++</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-143"><span class="line_nr">143:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">else</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-144"><span class="line_nr">144:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* Literal (noise) */</span></div></td></tr>
+<tr><td class="loc" id="loc-145"><span class="line_nr">145:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">d</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-146"><span class="line_nr">146:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">length</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_RANDLENGTH</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-147"><span class="line_nr">147:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">d</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">pos</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">length</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-148"><span class="line_nr">148:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">d</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&gt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffSize</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">d</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffSize</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-149"><span class="line_nr">149:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">while</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">pos</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">d</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffPtr</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original identifier">pos</span></div><div style="display: inline;"><span class="original punctuation">++</span></div><div style="display: inline;"><span class="original punctuation">]</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genChar</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-150"><span class="line_nr">150:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-151"><span class="line_nr">151:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-152"><span class="line_nr">152:</span><div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-153"><span class="line_nr">153:</span></td></tr>
+<tr><td class="loc" id="loc-154"><span class="line_nr">154:</span></td></tr>
+<tr><td class="loc" id="loc-155"><span class="line_nr">155:</span><div style="display: inline;"><span class="original keyword">void</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genBuffer</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">void</span></div><div style="display: inline;"><span class="original punctuation">*</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buffer</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">double</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">double</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">litProba</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-156"><span class="line_nr">156:</span><div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-157"><span class="line_nr">157:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">litDistribTable</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-158"><span class="line_nr">158:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">litProba</span></div><div style="display: inline;"><span class="original punctuation">==</span></div><div style="display: inline;"><span class="original literal">0.0</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">litProba</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">/</span></div>&nbsp;<div style="display: inline;"><span class="original literal">4.5</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-159"><span class="line_nr">159:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">RDG_fillLiteralDistrib</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">litProba</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-160"><span class="line_nr">160:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genBlock</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">buffer</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-161"><span class="line_nr">161:</span><div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-162"><span class="line_nr">162:</span></td></tr>
+<tr><td class="loc" id="loc-163"><span class="line_nr">163:</span></td></tr>
+<tr><td class="loc" id="loc-164"><span class="line_nr">164:</span><div style="display: inline;"><span class="original punctuation">#</span></div><div style="display: inline;"><span class="original identifier">define</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_BLOCKSIZE</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original literal">128</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">KB</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-165"><span class="line_nr">165:</span><div style="display: inline;"><span class="original keyword">void</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genOut</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">long</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">double</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">double</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">litProba</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original keyword">unsigned</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div></td></tr>
+<tr><td class="loc" id="loc-166"><span class="line_nr">166:</span><div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-167"><span class="line_nr">167:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">BYTE</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buff</span></div><div style="display: inline;"><span class="original punctuation">[</span></div><div style="display: inline;"><span class="original identifier">RDG_DICTSIZE</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_BLOCKSIZE</span></div><div style="display: inline;"><span class="original punctuation">]</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-168"><span class="line_nr">168:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">U64</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">total</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-169"><span class="line_nr">169:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">size_t</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">genBlockSize</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_BLOCKSIZE</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-170"><span class="line_nr">170:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">litDistribTable</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-171"><span class="line_nr">171:</span></td></tr>
+<tr><td class="loc" id="loc-172"><span class="line_nr">172:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* init */</span></div></td></tr>
+<tr><td class="loc" id="loc-173"><span class="line_nr">173:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">litProba</span></div><div style="display: inline;"><span class="original punctuation">==</span></div><div style="display: inline;"><span class="original literal">0.0</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">litProba</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">/</span></div>&nbsp;<div style="display: inline;"><span class="original literal">4.5</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-174"><span class="line_nr">174:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">RDG_fillLiteralDistrib</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">litProba</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-175"><span class="line_nr">175:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">SET_BINARY_MODE</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">stdout</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-176"><span class="line_nr">176:</span></td></tr>
+<tr><td class="loc" id="loc-177"><span class="line_nr">177:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* Generate dict */</span></div></td></tr>
+<tr><td class="loc" id="loc-178"><span class="line_nr">178:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genBlock</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">buff</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_DICTSIZE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original literal">0</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-179"><span class="line_nr">179:</span></td></tr>
+<tr><td class="loc" id="loc-180"><span class="line_nr">180:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* Generate compressible data */</span></div></td></tr>
+<tr><td class="loc" id="loc-181"><span class="line_nr">181:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">while</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">total</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">size</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">{</span></div></td></tr>
+<tr><td class="loc" id="loc-182"><span class="line_nr">182:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">RDG_genBlock</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">buff</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_DICTSIZE</span></div><div style="display: inline;"><span class="original punctuation">+</span></div><div style="display: inline;"><span class="original identifier">RDG_BLOCKSIZE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_DICTSIZE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">matchProba</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">lt</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&amp;</span></div><div style="display: inline;"><span class="original identifier">seed</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-183"><span class="line_nr">183:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original keyword">if</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">size</span></div><div style="display: inline;"><span class="original punctuation">-</span></div><div style="display: inline;"><span class="original identifier">total</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">&lt;</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_BLOCKSIZE</span></div><div style="display: inline;"><span class="original punctuation">)</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">genBlockSize</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">=</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">size_t</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">size</span></div><div style="display: inline;"><span class="original punctuation">-</span></div><div style="display: inline;"><span class="original identifier">total</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-184"><span class="line_nr">184:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">total</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+=</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">genBlockSize</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-185"><span class="line_nr">185:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">fwrite</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">buff</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original literal">1</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">genBlockSize</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">stdout</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div>&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* should check potential write error */</span></div></td></tr>
+<tr><td class="loc" id="loc-186"><span class="line_nr">186:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original comment">/* update dict */</span></div></td></tr>
+<tr><td class="loc" id="loc-187"><span class="line_nr">187:</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original identifier">memcpy</span></div><div style="display: inline;"><span class="original punctuation">(</span></div><div style="display: inline;"><span class="original identifier">buff</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">buff</span></div>&nbsp;<div style="display: inline;"><span class="original punctuation">+</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_BLOCKSIZE</span></div><div style="display: inline;"><span class="original punctuation">,</span></div>&nbsp;<div style="display: inline;"><span class="original identifier">RDG_DICTSIZE</span></div><div style="display: inline;"><span class="original punctuation">)</span></div><div style="display: inline;"><span class="original punctuation">;</span></div></td></tr>
+<tr><td class="loc" id="loc-188"><span class="line_nr">188:</span>&nbsp;&nbsp;&nbsp;&nbsp;<div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+<tr><td class="loc" id="loc-189"><span class="line_nr">189:</span><div style="display: inline;"><span class="original punctuation">}</span></div></td></tr>
+</table>
+<script>
+const MAX_NUM_TESTCASES = 0;
+const g_mutids = [];
+const g_mut_st_map = ['unknown','killed','alive','killedByCompiler','timeout','noCoverage'];
+const g_mut_kind_map = ['none','rorLT','rorLE','rorGT','rorGE','rorEQ','rorNE','lcrAnd','lcrOr','aorMul','aorDiv','aorRem','aorAdd','aorSub','aorMulAssign','aorDivAssign','aorRemAssign','aorAddAssign','aorSubAssign','uoiPostInc','uoiPostDec','uoiPreInc','uoiPreDec','uoiAddress','uoiIndirection','uoiPositive','uoiNegative','uoiComplement','uoiNegation','uoiSizeof_','absPos','absNeg','absZero','stmtDel','corAnd','corOr','corFalse','corLhs','corRhs','corEQ','corNE','corTrue','rorTrue','rorFalse','dcrTrue','dcrFalse','dcrBomb','dcrCaseDel','rorpLT','rorpLE','rorpGT','rorpGE','rorpEQ','rorpNE','lcrbAnd','lcrbOr','lcrbAndAssign','lcrbOrAssign','lcrbLhs','lcrbRhs','lcrLhs','lcrRhs','lcrTrue','lcrFalse','aorLhs','aorRhs','uoiDel','dcrReturnTrue','dcrReturnFalse','aorsMul','aorsDiv','aorsAdd','aorsSub','aorsMulAssign','aorsDivAssign','aorsAddAssign','aorsSubAssign'];
+const g_mut_kindGroup_map = ['all','ror','rorp','lcr','aor','uoi','sdl','dcr','lcrb','aors'];
+var g_testcases_kills = {}
+var g_muts_data = {};
+g_muts_data[-1] = {'kind' : null, 'status' : null, 'testCases' : null, 'orgText' : null, 'mutText' : null, 'meta' : null};
+</script></body>
+</html>
