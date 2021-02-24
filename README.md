@@ -1,6 +1,6 @@
 # dexcov
 
-Generates a dextool mutate vs lcov side by side presentation
+Generates a [Dextool Mutate](https://github.com/joakim-brannstrom/dextool/tree/master/plugin/mutate) vs [LCOV](https://github.com/linux-test-project/lcov) side by side presentation.
 
 Example:
 
