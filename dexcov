@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-Converts a list of lcov html files to a format that can be compared with
-dextool mutate
+Generates html reports where a dextool mutation testing report can be compared
+with an lcov code coverage report.
 """
 
 import optparse
@@ -108,7 +108,7 @@ compare_file_template="""
 """
 
 def main(argv):
-    parser = optparse.OptionParser('mutcov.py: PATH PATH')
+    parser = optparse.OptionParser('dexcov: PATH PATH')
     parser.set_description(__doc__.strip())
     parser.add_option('-i', '--in-place',
                       action="store_true",
@@ -124,8 +124,8 @@ def main(argv):
                       action="store",
                       type='string',
                       dest='outDir',
-                      default="mutcov",
-                      help="Directory to store the result (default: mutcov)")
+                      default="dexcov",
+                      help="Directory to store the result (default: dexcov)")
     
     (opts, args) = parser.parse_args(argv)
     if not len(args) == 2:
@@ -190,35 +190,3 @@ def main(argv):
     
 if __name__ == '__main__':
     main(sys.argv[1:])
-
-    
-def foo():
-    for arg in args:
-        if not os.path.exists(arg):
-            print('Error: path %s does not exist' % arg)
-            return 1
-
-    for arg in args:
-        content = list()
-        startCopy = False
-        with open(arg,'r') as fin:
-            lines = fin.readlines()
-            for line in lines:
-                line = line.rstrip()
-                if startCopy:
-                    content.append(line)
-                if line.startswith("<pre class=\"sourceHeading\">"):
-                    startCopy=True
-        if not startCopy:
-            print("skipping: %s" % arg)
-            continue
-        if not opts.editInPlace:
-            print(new_header)
-            for line in content:
-                print(line)
-        else:
-            print("converting: %s" % arg)
-            with open(arg,'w') as fout:
-                fout.write(new_header % os.path.splitext(os.path.basename(arg))[0])
-                for line in content:
-                    fout.write(line+'\n')
