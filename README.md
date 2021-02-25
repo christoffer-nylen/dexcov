@@ -9,4 +9,4 @@ $ dexcov example/lcov_html example/dextool_html -o example/out
 $ xdg-open example/out/lz4.c.html
 ```
 
-![pic1](https://imgur.com/a/c9rFq6T)
+![pic1](https://i.imgur.com/dPqurbl.png)
