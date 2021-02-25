@@ -107,12 +107,17 @@ compare_file_template="""
 """
 
 def main(argv):
-    parser = optparse.OptionParser('dexcov: PATH PATH')
+    parser = optparse.OptionParser('dexcov: [Options] PATH PATH')
     parser.set_description(__doc__.strip())
-    parser.add_option('-i', '--in-place',
+    parser.add_option('-j', '--enable-js',
                       action="store_true",
-                      dest="editInPlace",
-                      help="Edit files in place",
+                      dest="enableMutateJavascript",
+                      help="Enables dextool mutate html javascript interaction (Default: False)",
+                      default=False)
+    parser.add_option('-c', '--use-lcov-color',
+                      action="store_true",
+                      dest="useLcovColor",
+                      help="Change the color theme to look like lcov (Default: False)",
                       default=False)
     parser.add_option('-v', '--verbose',
                       action="store_true",
@@ -178,6 +183,14 @@ def main(argv):
 
     tool_dir = os.path.dirname(os.path.abspath(__file__))
     run_cmd('cp %s/data/* %s' % (tool_dir, opts.outDir))
+
+    colorOption=''
+    if opts.useLcovColor:
+        colorOption='-c'
+    
+    if not opts.enableMutateJavascript:
+        for src_file in mutate_files:
+            run_cmd('mutate2lcov.py %s -i %s' % (colorOption, os.path.join(opts.outDir, mutate_files[src_file])))
 
     for src_file in gcov_files:
         run_cmd('lcov2mutate.py -i %s' % os.path.join(opts.outDir, gcov_files[src_file]))
