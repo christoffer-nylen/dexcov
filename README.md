@@ -1,6 +1,6 @@
 # dexcov
 
-Tool for generating a [Dextool Mutate](https://github.com/joakim-brannstrom/dextool/tree/master/plugin/mutate) vs [LCOV](https://github.com/linux-test-project/lcov) side by side presentation
+Tool for generating a [Dextool Mutate](https://github.com/joakim-brannstrom/dextool/tree/master/plugin/mutate) (C/C++ Mutation Testing) vs [LCOV](https://github.com/linux-test-project/lcov) (C/C++ Code Coverage) side by side presentation
 
 Example 1: Original themes
 
